@@ -100,3 +100,9 @@ UnitTesting/obj/x86/Debug/TemporaryGeneratedFile_E7A71F73-0F8D-4B9B-B56E-8E70B10
 UnitTesting/obj/x86/Debug/TestMajormudFunctions.csproj.CoreCompileInputs.cache
 UnitTesting/obj/x86/Debug/TestMajormudFunctions.csproj.FileListAbsolute.txt
 UnitTesting/obj/x86/Debug/TestMajormudFunctions.csprojAssemblyReference.cache
+.vs/ReMUD/v15/.suo
+*.lock
+*.ide
+*.ide-shm
+*.ide-wal
+*.cache

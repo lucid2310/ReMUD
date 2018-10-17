@@ -7,6 +7,9 @@ using System;
 
 namespace ReMUD.Game
 {
+    /// <summary>
+    /// The GameManager class will manage all the logic in the game currently.
+    /// </summary>
     public class GameManager
     {
         public MetaContentManager ContentManager = new MetaContentManager();
