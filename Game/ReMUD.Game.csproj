@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2A107B71-5E9A-4251-8F14-9F8CA537BCAB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ReMUD.Game</RootNamespace>
+    <AssemblyName>ReMUD.Game</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Btrieve\BtrieveTypes.cs" />
+    <Compile Include="GameManager.cs" />
+    <Compile Include="Managers\ActionManager.cs" />
+    <Compile Include="Managers\BankManager.cs" />
+    <Compile Include="Managers\BaseManager.cs" />
+    <Compile Include="Managers\ClassManager.cs" />
+    <Compile Include="Managers\ContentStorage.cs" />
+    <Compile Include="Managers\IManager.cs" />
+    <Compile Include="Managers\MetaContentManager.cs" />
+    <Compile Include="Managers\GangManager.cs" />
+    <Compile Include="Managers\ItemManager.cs" />
+    <Compile Include="Managers\LogManager.cs" />
+    <Compile Include="Managers\MessageManager.cs" />
+    <Compile Include="Managers\NPCManager.cs" />
+    <Compile Include="Managers\PlayerManager.cs" />
+    <Compile Include="Managers\RaceManager.cs" />
+    <Compile Include="Managers\RoomManager.cs" />
+    <Compile Include="Managers\ShopManager.cs" />
+    <Compile Include="Managers\SpellManager.cs" />
+    <Compile Include="Managers\TextBlockManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\ActionType.cs" />
+    <Compile Include="Structures\BankType.cs" />
+    <Compile Include="Structures\ClassType.cs" />
+    <Compile Include="Structures\ContentTypes.cs" />
+    <Compile Include="Structures\GangType.cs" />
+    <Compile Include="Structures\ItemType.cs" />
+    <Compile Include="Content\PlayerEntity.cs" />
+    <Compile Include="Structures\MessageType.cs" />
+    <Compile Include="Structures\NonPlayerCharacterType.cs" />
+    <Compile Include="Structures\PlayerType.cs" />
+    <Compile Include="Structures\RaceType.cs" />
+    <Compile Include="Structures\RoomType.cs" />
+    <Compile Include="Structures\ShopType.cs" />
+    <Compile Include="Structures\SpellType.cs" />
+    <Compile Include="Structures\StatType.cs" />
+    <Compile Include="Structures\TextBlockType.cs" />
+    <Compile Include="Structures\UserType.cs" />
+    <Compile Include="Structures\Utilities\BtrieveUtility.cs" />
+    <Compile Include="Structures\Utilities\TextUtility.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="WBTRV32.DLL">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
