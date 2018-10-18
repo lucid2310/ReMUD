@@ -14,7 +14,7 @@ namespace ReMUD.Game.Managers
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] byte[] posBlk,
         [MarshalAs(UnmanagedType.Struct, SizeConst = KEY_BUF_LEN)]
         ref SpellType dataBuffer, ref int dataLength,
-        [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] char[] keyBffer,
+        [MarshalAs(UnmanagedType.AsAny, SizeConst = KEY_BUF_LEN)] object keyBffer,
         ushort keyLength, ushort keyNum);
 
         public override short Close()
@@ -86,6 +86,17 @@ namespace ReMUD.Game.Managers
             LogManager.Log("Number of {0} loaded: {1}. Status = {2}", ContentType.ToString(), Count, BtrieveTypes.BtrieveErrorCode(Status));
 
             return Status;
+        }
+
+        public override short Save(SpellType record)
+        {
+            short status = BTRCALL(BtrieveTypes.BtrieveActionType.BGETEQUAL, PositionBlock,
+                                    ref ProxyRecordData, ref RecordSize, record.Number, KEY_BUF_LEN, 0);
+
+            status &= BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
+                                    ref record, ref RecordSize, FileName, 0, 0);
+
+            return status;
         }
 
         public override SpellType Select(int id)

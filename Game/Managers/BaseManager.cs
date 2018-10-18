@@ -12,6 +12,7 @@ namespace ReMUD.Game.Managers
         public char[] FileName = new char[0];
         public ContentTypes ContentType = ContentTypes.Actions;
         public ContentStorage<K> Contents = new ContentStorage<K>();
+        protected SpellType ProxyRecordData = new SpellType();
 
         public abstract short Initialize(string path);
         public abstract short Close();
@@ -50,5 +51,7 @@ namespace ReMUD.Game.Managers
 
             return default(K);
         }
+
+        public virtual short Save(K record) { return (short)Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
     }
 }

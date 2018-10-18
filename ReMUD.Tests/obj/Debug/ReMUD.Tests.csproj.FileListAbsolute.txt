@@ -1,0 +1,14 @@
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\ReMUD.Tests.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\ReMUD.Tests.pdb
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.xml
+C:\Projects\GIT\ReMUD\ReMUD.Tests\bin\Debug\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.xml
+C:\Projects\GIT\ReMUD\ReMUD.Tests\obj\Debug\ReMUD.Tests.csprojAssemblyReference.cache
+C:\Projects\GIT\ReMUD\ReMUD.Tests\obj\Debug\ReMUD.Tests.csproj.CoreCompileInputs.cache
+C:\Projects\GIT\ReMUD\ReMUD.Tests\obj\Debug\ReMUD.Tests.csproj.CopyComplete
+C:\Projects\GIT\ReMUD\ReMUD.Tests\obj\Debug\ReMUD.Tests.dll
+C:\Projects\GIT\ReMUD\ReMUD.Tests\obj\Debug\ReMUD.Tests.pdb
