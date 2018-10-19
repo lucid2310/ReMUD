@@ -16,7 +16,7 @@ namespace ReMUD.Game
 
         public void _internal_error(string message, params object[] parameters)
         {
-            Console.WriteLine(message, parameters);
+            LogManager.Log(message, parameters);
         }
 
         public void _log(string message, params object[] parameters)
@@ -48,12 +48,12 @@ namespace ReMUD.Game
 
         public void _save_player(PlayerEntity playerInfo)
         {
-            short saveStatus = 0;// GameContentManager.PlayerContentManager.Save(playerInfo);
+            ushort saveStatus = 0;// GameContentManager.PlayerContentManager.Save(playerInfo);
 
-            switch ((ushort)saveStatus)
+            switch (saveStatus)
             {
                 case BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY:
-                    _log("Player {0} saved.", BtrieveUtility.ConvertToString(playerInfo.Record.BBSName));
+                    _log("Player {0} saved.", BtrieveUtility.ConvertToString(playerInfo.Record.Username));
                     break;
                 default:
                     _internal_error(BtrieveTypes.BtrieveErrorCode(saveStatus));

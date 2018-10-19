@@ -14,21 +14,21 @@ namespace ReMUD.Game.Managers
     public class ShopManager : BaseManager<int, ShopType>
     {
         [DllImport(BTRIEVE_DLL, CharSet = CharSet.Ansi)]
-        public static extern short BTRCALL(ushort operation,
+        public static extern ushort BTRCALL(ushort operation,
            [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] byte[] posBlk,
            [MarshalAs(UnmanagedType.Struct, SizeConst = KEY_BUF_LEN)]
         ref ShopType dataBuffer, ref int dataLength,
            [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] char[] keyBffer,
            ushort keyLength, ushort keyNum);
 
-        public override short Close()
+        public override ushort Close()
         {
             ShopType RecordData = new ShopType();
 
             return BTRCALL(BtrieveTypes.BtrieveActionType.BCLOSE, PositionBlock, ref RecordData, ref RecordSize, FileName, 0, 0);
         }
 
-        public override short Initialize(string path)
+        public override ushort Initialize(string path)
         {
             ContentType = Structures.ContentTypes.Shops;
 
@@ -58,7 +58,7 @@ namespace ReMUD.Game.Managers
                 }
                 else
                 {
-                    Console.WriteLine("Error: {0}", Status);
+                    LogManager.Log("Error: {0}", Status);
                 }
 
                 while (Status != BtrieveTypes.BtrieveStatus.END_OF_FILE)
@@ -77,7 +77,7 @@ namespace ReMUD.Game.Managers
                     }
                     else
                     {
-                        Console.WriteLine("Error: {0}", Status);
+                        LogManager.Log("Error: {0}", Status);
                     }
                 }
             }

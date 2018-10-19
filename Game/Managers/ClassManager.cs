@@ -10,21 +10,21 @@ namespace ReMUD.Game.Managers
     public class ClassManager : BaseManager<int, ClassType>
     {
         [DllImport(BTRIEVE_DLL, CharSet = CharSet.Ansi)]
-        public static extern short BTRCALL(ushort operation,
+        public static extern ushort BTRCALL(ushort operation,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] byte[] posBlk,
         [MarshalAs(UnmanagedType.Struct, SizeConst = KEY_BUF_LEN)]
         ref ClassType dataBuffer, ref int dataLength,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] char[] keyBffer,
         ushort keyLength, ushort keyNum);
 
-        public override short Close()
+        public override ushort Close()
         {
             ClassType RecordData = new ClassType();
 
             return BTRCALL(BtrieveTypes.BtrieveActionType.BCLOSE, PositionBlock, ref RecordData, ref RecordSize, FileName, 0, 0);
         }
 
-        public override short Initialize(string path)
+        public override ushort Initialize(string path)
         {
             string tmpFullPath = string.Format("{0}\\{1}", path, "wccclas2.dat");
 
@@ -54,7 +54,7 @@ namespace ReMUD.Game.Managers
                 }
                 else
                 {
-                    Console.WriteLine("Error: {0}", Status);
+                    LogManager.Log("Error: {0}", Status);
                 }
 
                 while (Status != BtrieveTypes.BtrieveStatus.END_OF_FILE)
@@ -64,7 +64,7 @@ namespace ReMUD.Game.Managers
 
                     if (Status == BtrieveTypes.BtrieveStatus.END_OF_FILE)
                     {
-                        Status = (short)BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
+                        Status = BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
                         break;
                     }
 
@@ -74,7 +74,7 @@ namespace ReMUD.Game.Managers
                     }
                     else
                     {
-                        Console.WriteLine("Error: {0}", Status);
+                        LogManager.Log("Error: {0}", Status);
                     }
                 }
             }

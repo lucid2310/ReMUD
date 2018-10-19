@@ -15,7 +15,7 @@ namespace ReMUD.Game.Managers
     public class PlayerManager : BaseManager<string, PlayerType>
     {
         [DllImport(BTRIEVE_DLL, CharSet = CharSet.Ansi)]
-        public static extern short BTRCALL(ushort operation,
+        public static extern ushort BTRCALL(ushort operation,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] byte[] posBlk,
         [MarshalAs(UnmanagedType.Struct, SizeConst = KEY_BUF_LEN)]
         ref PlayerType dataBuffer,
@@ -25,7 +25,7 @@ namespace ReMUD.Game.Managers
 
         public string[] PlayerKeys = new string[0];
 
-        public override short Initialize(string path)
+        public override ushort Initialize(string path)
         {
             List<string> playerKeys = new List<string>();
 
@@ -53,18 +53,18 @@ namespace ReMUD.Game.Managers
 
                 if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                 {
-                    Contents.Add(BtrieveUtility.ConvertToString(RecordData.BBSName), RecordData);
+                    Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
 
-                    playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.BBSName));
+                    playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.Username));
                 }
                 else
                 {
                     if (Status == BtrieveTypes.BtrieveStatus.END_OF_FILE)
                     {
-                        return (short)BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
+                        return BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
                     }
 
-                    Console.WriteLine("Error: {0}", Status);
+                    LogManager.Log("Error: {0}", Status);
                 }
 
                 while (Status != BtrieveTypes.BtrieveStatus.END_OF_FILE)
@@ -74,18 +74,18 @@ namespace ReMUD.Game.Managers
 
                     if (Status == BtrieveTypes.BtrieveStatus.END_OF_FILE)
                     {
-                        Status = (short)BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
+                        Status = BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
                         break;
                     }
 
                     if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                     {
-                        Contents.Add(BtrieveUtility.ConvertToString(RecordData.BBSName), RecordData);
-                        playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.BBSName));
+                        Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
+                        playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.Username));
                     }
                     else
                     { 
-                        Console.WriteLine("Error: {0}", Status);
+                        LogManager.Log("Error: {0}", Status);
                         break;
                     }
                 }
@@ -100,27 +100,21 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
-        public short Insert(PlayerEntity player)
+        public ushort Insert(PlayerType player)
         {
-            short status = 0;
+            Status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
+                            ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
 
-            status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
-                            ref player.Record, ref RecordSize, player.Record.BBSName, KEY_BUF_LEN, 0);
-
-            return status;
+            return Status;
         }
 
-        public short Save(PlayerEntity player)
+        public override ushort Save(PlayerType player)
         {
-            short status = 0;
-
-            status = BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
-                                    ref player.Record, ref RecordSize, player.Record.BBSName, KEY_BUF_LEN, 0);
-           
-            return status;
+            return BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
+                                    ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
         }
 
-        public override short Close()
+        public override ushort Close()
         {
             PlayerType RecordData = new PlayerType();
 

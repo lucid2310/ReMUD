@@ -98,7 +98,7 @@ namespace ReMUD.Tests
 
             performanceTime.Stop();
 
-            Console.WriteLine("Finished in {0} msec.", performanceTime.ElapsedMilliseconds);
+            LogManager.Log("Finished in {0} msec.", performanceTime.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -111,16 +111,18 @@ namespace ReMUD.Tests
 
             SpellType spellTypeA = spellType;
 
-           // AssertValue(spellTypeA.Difficulty, (short)15);
             spellTypeA.Difficulty = 16;
-           // AssertValue(spellTypeA.Difficulty, (short)16);
+     
+            ushort status = SpellContentManager.Save(spellTypeA);
 
-            short status = SpellContentManager.Save(spellTypeA);
+            Assert.AreEqual(Game.Btrieve.BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY, status);
+
+            SpellType spellTypeB = SpellContentManager.Select(1);
         }
 
         public void AssertValue(object valueA, object valueB)
         {
-            Console.WriteLine("Assert value {0} is set to {1}", valueA, valueB);
+            LogManager.Log("Assert value {0} is set to {1}", valueA, valueB);
             Assert.AreEqual(valueA, valueB);
         }
 

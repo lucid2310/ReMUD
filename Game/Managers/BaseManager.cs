@@ -6,7 +6,7 @@ namespace ReMUD.Game.Managers
     {
         public const string BTRIEVE_DLL = "WBTRV32.DLL";
         public const int KEY_BUF_LEN = 255;
-        public short Status = 0;
+        public ushort Status = 0;
         public byte[] PositionBlock = new byte[128];
         public int RecordSize = 0;
         public char[] FileName = new char[0];
@@ -14,8 +14,8 @@ namespace ReMUD.Game.Managers
         public ContentStorage<K> Contents = new ContentStorage<K>();
         protected SpellType ProxyRecordData = new SpellType();
 
-        public abstract short Initialize(string path);
-        public abstract short Close();
+        public abstract ushort Initialize(string path);
+        public abstract ushort Close();
 
         public K GetNullContent()
         {
@@ -52,6 +52,7 @@ namespace ReMUD.Game.Managers
             return default(K);
         }
 
-        public virtual short Save(K record) { return (short)Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
+        public virtual ushort Save(K record) { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
+        public virtual ushort Reload() { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
     }
 }

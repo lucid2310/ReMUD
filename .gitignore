@@ -106,3 +106,11 @@ UnitTesting/obj/x86/Debug/TestMajormudFunctions.csprojAssemblyReference.cache
 *.ide-shm
 *.ide-wal
 *.cache
+ReMUD.Tests/bin/x86/Debug/ReMUD.Game.dll
+ReMUD.Tests/bin/x86/Debug/ReMUD.Game.pdb
+ReMUD.Tests/bin/x86/Debug/ReMUD.Tests.dll
+ReMUD.Tests/bin/x86/Debug/ReMUD.Tests.pdb
+ReMUD.Tests/obj/x86/Debug/ReMUD.Tests.dll
+ReMUD.Tests/obj/x86/Debug/ReMUD.Tests.pdb
+*.pdb
+*.dll

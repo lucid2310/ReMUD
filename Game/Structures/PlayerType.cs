@@ -1,4 +1,6 @@
-﻿using ReMUD.Game.Structures.Utilities;
+﻿using ReMUD.Game.Managers;
+using ReMUD.Game.Structures.SupportTypes;
+using ReMUD.Game.Structures.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,8 +14,9 @@ namespace ReMUD.Game.Structures
 {
     public struct PlayerType
     {
+        //<start>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
-        public char[] BBSName;
+        public char[] Username;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
         public char[] FirstName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 19)]
@@ -30,13 +33,25 @@ namespace ReMUD.Game.Structures
         public short Race;
         public short Class;
         public short Level;
-        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
-        //public short[] Stat;
-        public StatType Stat;
-        public short MaxHP;
-        public short CurrentHP;
-        public short MaxENC;
-        public short CurrentENC;
+        //public PlayerStatType Stat;
+        public short Intellect;
+        public short WillPower;
+        public short Strength;
+        public short Health;
+        public short Agility;
+        public short Charm;
+        public short MaxIntellect;
+        public short MaxWillPower;
+        public short MaxStrength;
+        public short MaxHealth;
+        public short MaxAgility;
+        public short MaxCharm;
+        //public StatType HealthVitals;
+        public short MaximumHealth;
+        public short CurrentHealth;
+        //public StatType Encumberance;
+        public short MaximumEncumberance;
+        public short CurrentEncumberance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public short[] Energy;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
@@ -45,13 +60,9 @@ namespace ReMUD.Game.Structures
         public short MagicRes2;
         public int MapNumber;
         public int RoomNum;
-        public short nothing2;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         public short[] unknown2;
-        public short nothing3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public byte[] unknown3;
-        public short nothing4;
+        //public InventoryType Inventory;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public int[] Item;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
@@ -75,7 +86,7 @@ namespace ReMUD.Game.Structures
         public int[] LastMap;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public int[] LastRoom;
-        public short nothing8;
+        public short BriefVerboseFlag;
         public short BroadcastChan;
         public int unknown5;
         public short Perception;
@@ -95,19 +106,19 @@ namespace ReMUD.Game.Structures
         public int Gold;
         public int Silver;
         public int Copper;
+        //public CurrencyType Currency;
         public int WeaponHand;
         public int nothing10;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public int[] WornItem;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public short[] unknown7;
+        public short[] unknown7_wornitems;
         public short unknown8;
         public short LivesRemaining;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
         public short[] unknown9;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 19)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public char[] GangName;
-        public byte AfterGangName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         public byte[] unknown11;
         public short CPRemaining;
@@ -123,13 +134,8 @@ namespace ReMUD.Game.Structures
         public short[] Ability;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public short[] AbilityModifier;
-        public short unknown13a;
-        public short unknown13b;
-        public short unknown13c;
-        public short unknown13d;
-        public short unknown13e;
-        public short unknown13f;
-        public short unknown13g;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
+        public short[] unknown13a;
         public int CharLife;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         public short[] unknown13;
@@ -140,11 +146,16 @@ namespace ReMUD.Game.Structures
         public short unknown14;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         public int[] unknown15;
-
+        //<stop>
 
         public byte[] Serialize()
         {
             return BtrieveUtility.Serialize<PlayerType>(this);
+        }
+
+        public void SetUserName(string username)
+        {
+            Username = username.PadRight(30, '\0').ToArray();
         }
 
         public static void PrintStats(PlayerType player)
@@ -179,7 +190,7 @@ namespace ReMUD.Game.Structures
                         break;
                 }
 
-                Console.WriteLine("{0}, {1}", info.Name, tmpValue);
+                LogManager.Log("{0}, {1}", info.Name, tmpValue);
             }
         }
     }

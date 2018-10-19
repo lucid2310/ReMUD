@@ -34,9 +34,9 @@ namespace ReMUD.Game.Managers
             return (T)_contentManagers[typeof(T)];
         }
 
-        public short Initialize(string path)
+        public ushort Initialize(string path)
         {
-            short status = 0;
+            ushort status = 0;
 
             foreach(var manager in _contentManagers)
             {

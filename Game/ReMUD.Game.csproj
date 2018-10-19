@@ -98,7 +98,11 @@
     <Compile Include="Structures\RoomType.cs" />
     <Compile Include="Structures\ShopType.cs" />
     <Compile Include="Structures\SpellType.cs" />
-    <Compile Include="Structures\StatType.cs" />
+    <Compile Include="Structures\SupportTypes\CurrencyType.cs" />
+    <Compile Include="Structures\SupportTypes\InventoryItemType.cs" />
+    <Compile Include="Structures\SupportTypes\InventoryType.cs" />
+    <Compile Include="Structures\SupportTypes\PlayerStatType.cs" />
+    <Compile Include="Structures\SupportTypes\StatType.cs" />
     <Compile Include="Structures\TextBlockType.cs" />
     <Compile Include="Structures\UserType.cs" />
     <Compile Include="Structures\Utilities\BtrieveUtility.cs" />

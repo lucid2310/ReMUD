@@ -11,7 +11,7 @@ namespace ReMUD.Game.Managers
 
         public void LoadUsers()
         {
-            Console.WriteLine("Loading Users.");
+            LogManager.Log("Loading Users.");
             Users.Add(1, new UserType(1, "Sysop"));
         }
 
