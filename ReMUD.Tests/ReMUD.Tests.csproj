@@ -73,16 +73,9 @@
     <Compile Include="TestConstants.cs" />
     <Compile Include="TextBlockTestProcedures.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PlayerTestProcedures.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Game\ReMUD.Game.csproj">
-      <Project>{2a107b71-5e9a-4251-8f14-9f8ca537bcab}</Project>
-      <Name>ReMUD.Game</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

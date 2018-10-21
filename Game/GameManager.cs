@@ -2,6 +2,7 @@
 using ReMUD.Game.Content;
 using ReMUD.Game.Managers;
 using ReMUD.Game.Structures;
+using ReMUD.Game.Structures.SupportTypes;
 using ReMUD.Game.Structures.Utilities;
 using System;
 
@@ -458,10 +459,15 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _calculate_secondary_stats()
+        public void _calculate_secondary_stats(string username)
         {
+            PlayerType player = ContentManager.Select<PlayerManager>().Select(username);
 
-            //TODO: Insert Logic.
+            // FindTraps
+            bool status = _user_has_ability(player, AbilityTypes.FindTraps);
+
+
+
         }
 
         public void _can_see()
@@ -1958,10 +1964,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_class_data()
+        public ClassType _get_class_data(int classId)
         {
-
-            //TODO: Insert Logic.
+            return ContentManager.Select<ClassManager>().Select(classId);
         }
 
         public void _get_class_name()
@@ -1970,10 +1975,27 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_coin_weight()
+        public int _get_coin_weight(int userId)
         {
+            int coinWeight = 0;
 
-            //TODO: Insert Logic.
+            PlayerType playerType = new PlayerType();
+
+            if (userId != 0)
+            {
+                playerType = _get_player(userId);
+            }
+
+            if (playerType.Ability == null)
+            {
+                coinWeight = 0;
+            }
+            else
+            {
+                coinWeight = (playerType.Runic / 3 +  playerType.Platinum / 3 + playerType.Gold / 3 + playerType.Silver / 3 + playerType.Copper / 3);
+            }
+
+            return coinWeight;
         }
 
         public void _get_component_string()
@@ -1988,10 +2010,39 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_encumbrance_percent()
+        public int _get_encumbrance_percent(int userId)
         {
+            PlayerType playerType = new PlayerType();
+   
+            if (userId > 0)
+            {
+                playerType = _get_player(userId);
+            }
 
-            //TODO: Insert Logic.
+            if (playerType.Username == null)
+            {
+                return 100;
+            }
+            else
+            {
+                // 1. Get the coin weight.
+                int coinWeight = _get_coin_weight(userId);
+
+                // 2. result_one = coint weight + player + CurrentEncumberance * 100.
+                int resultOne = coinWeight + playerType.CurrentEncumbrance * 100;
+
+                // 3. get max weight.
+                int maxWeight = _get_max_weight(userId);
+
+                // 4. result_two = result_one / max_weight.
+                int resultTwo = resultOne / maxWeight;
+
+                // 5. 0x708 = result_two.
+                // return 0x708.
+                playerType.EncumbrancePercent = (short)resultTwo;
+            }
+
+            return playerType.EncumbrancePercent;
         }
 
         public void _get_gang_data()
@@ -2078,10 +2129,16 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_max_weight()
+        public int _get_max_weight(int userId)
         {
+            int maxWeight = 0;
+            PlayerType playerType = _get_player(userId);
+        
+            int encumbranceModifier = _get_user_ability_value(userId, AbilityTypes.Encumbrance);
+    
+            maxWeight = (encumbranceModifier + 100) * playerType.MaximumEncumbrance / 100;
 
-            //TODO: Insert Logic.
+            return maxWeight;
         }
 
         public void _get_message_data()
@@ -2114,16 +2171,14 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_race_data()
+        public RaceType _get_race_data(int raceId)
         {
-
-            //TODO: Insert Logic.
+            return ContentManager.Select<RaceManager>().Select(raceId);
         }
 
-        public void _get_race_name()
+        public string _get_race_name(int raceId)
         {
-
-            //TODO: Insert Logic.
+            return ContentManager.Select<RaceManager>().Select(raceId).GetName();
         }
 
         public void _get_random_name()
@@ -2192,10 +2247,99 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_user_ability_value()
+        public int _get_user_ability_value(int userId, int abilityId)
         {
+            PlayerType player = _get_player(userId);
 
-            //TODO: Insert Logic.
+            if(abilityId == AbilityTypes.Speed)
+            {
+                // TODO: Implement logic for "Speed" ability.
+            }
+
+            int totalValue = 0;
+
+            // 1. Check Spell Data, check each spell slot for a spell.
+            for (int i = 0; i < player.SpellCasted.Length; i++)
+            {
+                if (player.SpellCasted[i] > 0)
+                {
+                    SpellType spellType = _get_spell_data(player.SpellCasted[i]).Value;
+
+                    for (int s = 0; s < spellType.AbilityA.Length; s++)
+                    {
+                        if (spellType.AbilityA[s] == abilityId)
+                        {
+                            totalValue += spellType.AbilityB[s];
+                        }
+                    }
+                }
+            }
+
+
+            // 2. Check Race Data, if there is no race ability, then
+            RaceType raceType = _get_race_data(player.Race);
+
+            for (int i = 0; i < raceType.AbilityA.Length; i++)
+            {
+                if (raceType.AbilityA[i] == abilityId)
+                {
+                    totalValue += raceType.AbilityB[i];
+                }
+            }
+
+            ClassType classType = _get_class_data(player.Class);
+
+            // 2.a Check Class Data, TODO: the origal logic shows either race or class ability is checked, not both.
+            for (int i = 0; i < classType.AbilityNumber.Length; i++)
+            {
+                if (classType.AbilityNumber[i] == abilityId)
+                {
+                    totalValue += classType.AbilityValue[i];
+                }
+            }
+
+            // 3 Check player ability.
+            for (int i = 0; i < player.Ability.Length; i++)
+            {
+                if (player.Ability[i] == abilityId)
+                {
+                    totalValue += player.AbilityModifier[i];
+                }
+            }
+
+            // 4. Check Player Worn Items
+            for (int i = 0; i < player.WornItem.Length; i++)
+            {
+                if (player.WornItem[i] > 0)
+                {
+                    ItemType itemType = _get_item_data(player.WornItem[i]);
+
+                    for (int s = 0; s < itemType.AbilityNumber.Length; s++)
+                    {
+                        if (itemType.AbilityNumber[s] == abilityId)
+                        {
+                            totalValue += itemType.AbilityValue[s];
+                        }
+                    }
+                }
+            }
+
+            // 5. Check Player Main Hand. 
+            if (player.WeaponHand > 0)
+            {
+                ItemType itemType = _get_item_data(player.WeaponHand);
+
+                for (int i = 0; i < itemType.AbilityNumber.Length; i++)
+                {
+                    if (itemType.AbilityNumber[i] == abilityId)
+                    {
+                        totalValue += itemType.AbilityValue[i];
+                    }
+                }
+            }
+
+
+            return totalValue;
         }
 
         public void _get_user_currency()
@@ -2266,9 +2410,7 @@ namespace ReMUD.Game
 
         public void _init__wccmmud(string rootDirectory)
         {
-            rootDirectory = string.Format("{0}\\DATs", rootDirectory);
-
-            ContentManager.Initialize(rootDirectory);
+            ContentManager.Initialize(rootDirectory);           
         }
 
         public void _init_autocombat()
@@ -3583,10 +3725,90 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _user_has_ability()
+        public bool _user_has_ability(PlayerType player, int abilityId)
         {
+            // 1. Check Spell Data, check each spell slot for a spell.
+            for(int i = 0; i < player.SpellCasted.Length; i++)
+            {
+                if (player.SpellCasted[i] > 0)
+                {
+                    SpellType spellType = _get_spell_data(player.SpellCasted[i]).Value;
 
-            //TODO: Insert Logic.
+                    for (int s = 0; s < spellType.AbilityA.Length; s++)
+                    { 
+                        if(spellType.AbilityA[s] == abilityId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+
+            // 2. Check Race Data, if there is no race ability, then
+            RaceType raceType = _get_race_data(player.Race);
+
+            for(int i = 0; i < raceType.AbilityA.Length; i++)
+            {
+                if(raceType.AbilityA[i] == abilityId)
+                {
+                    return true;
+                }
+            }
+
+            ClassType classType = _get_class_data(player.Class);
+
+            // 2.a Check Class Data, TODO: the origal logic shows either race or class ability is checked, not both.
+            for (int i = 0; i < classType.AbilityNumber.Length; i++)
+            {
+                if (classType.AbilityNumber[i] == abilityId)
+                {
+                    return true;
+                }
+            }
+
+            // 3 Check player ability.
+            for(int i = 0; i < player.Ability.Length; i++)
+            {
+                if(player.Ability[i] == abilityId)
+                {
+                    return true;
+                }
+            }
+
+            // 4. Check Player Worn Items
+            for(int i = 0; i < player.WornItem.Length; i++)
+            {
+                if(player.WornItem[i] > 0)
+                {
+                    ItemType itemType = _get_item_data(player.WornItem[i]);
+
+                    for(int s = 0; s < itemType.AbilityNumber.Length; s++)
+                    {
+                        if(itemType.AbilityNumber[s] == abilityId)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            // 5. Check Player Main Hand. 
+            if(player.WeaponHand > 0)
+            {
+                ItemType itemType = _get_item_data(player.WeaponHand);
+
+                for (int i = 0; i < itemType.AbilityNumber.Length; i++)
+                {
+                    if (itemType.AbilityNumber[i] == abilityId)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+
+            return false;
         }
 
         public void _user_is_wearing()

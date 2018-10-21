@@ -40,5 +40,10 @@ namespace ReMUD.Game.Structures
         public int Nothing6;
         public int nothing7;
         public int nothing8;
+
+        public string GetName()
+        {
+            return Utilities.BtrieveUtility.ConvertToString(Name);
+        }
     }
 }

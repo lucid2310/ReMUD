@@ -12,6 +12,9 @@ using System.Threading.Tasks;
 
 namespace ReMUD.Game.Structures
 {
+    // Conversion from VB to C#
+    //            Long = Int
+    //            Int = Short
     public struct PlayerType
     {
         //<start>
@@ -33,7 +36,6 @@ namespace ReMUD.Game.Structures
         public short Race;
         public short Class;
         public short Level;
-        //public PlayerStatType Stat;
         public short Intellect;
         public short WillPower;
         public short Strength;
@@ -46,12 +48,10 @@ namespace ReMUD.Game.Structures
         public short MaxHealth;
         public short MaxAgility;
         public short MaxCharm;
-        //public StatType HealthVitals;
         public short MaximumHealth;
         public short CurrentHealth;
-        //public StatType Encumberance;
-        public short MaximumEncumberance;
-        public short CurrentEncumberance;
+        public short MaximumEncumbrance;
+        public short CurrentEncumbrance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public short[] Energy;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
@@ -60,9 +60,13 @@ namespace ReMUD.Game.Structures
         public short MagicRes2;
         public int MapNumber;
         public int RoomNum;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public short[] unknown2;
-        //public InventoryType Inventory;
+        public short Nothing2;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        public short[] Unknown2;
+        public short Nothing3;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        public byte[] Unknown3;
+        public short Nothing4;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public int[] Item;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
@@ -87,8 +91,10 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public int[] LastRoom;
         public short BriefVerboseFlag;
-        public short BroadcastChan;
-        public int unknown5;
+        public short BroadcastChannel;
+        public byte TalkSpeed;
+        public byte Statline;
+        public short Offset_5F6;
         public short Perception;
         public short Stealth;
         public short MartialArts;
@@ -106,7 +112,6 @@ namespace ReMUD.Game.Structures
         public int Gold;
         public int Silver;
         public int Copper;
-        //public CurrencyType Currency;
         public int WeaponHand;
         public int nothing10;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
@@ -128,8 +133,11 @@ namespace ReMUD.Game.Structures
         public short[] unknown12a;
         public byte bEDITED;
         public byte unknown12c;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
         public short[] unknown12d;
+        public short EncumbrancePercent;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
+        public short[] unknown12e;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public short[] Ability;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]

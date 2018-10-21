@@ -98,6 +98,7 @@
     <Compile Include="Structures\RoomType.cs" />
     <Compile Include="Structures\ShopType.cs" />
     <Compile Include="Structures\SpellType.cs" />
+    <Compile Include="Structures\SupportTypes\AbilityTypes.cs" />
     <Compile Include="Structures\SupportTypes\CurrencyType.cs" />
     <Compile Include="Structures\SupportTypes\InventoryItemType.cs" />
     <Compile Include="Structures\SupportTypes\InventoryType.cs" />
