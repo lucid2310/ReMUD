@@ -23,7 +23,7 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public byte[] Padding03;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityB;
+        public short[] AbilityValue;
         public short Energy;
         public short Level;
         public short BaseMinimum;
@@ -39,7 +39,7 @@ namespace ReMUD.Game.Structures
         public short ResistAbility;
         public short MageType;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityA;
+        public short[] AbilityId;
         public int CastMsgB;
         public short Mana;
         public byte MaxIncrease;

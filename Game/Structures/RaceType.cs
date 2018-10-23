@@ -23,10 +23,10 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public byte[] Padding01;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityA;
+        public short[] AbilityId;
         public short CP;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityB;
+        public short[] AbilityValue;
         public int nothing3;
         public short nothing4;
         public short ExpChart;

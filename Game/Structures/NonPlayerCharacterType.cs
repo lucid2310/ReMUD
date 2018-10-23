@@ -33,9 +33,9 @@ namespace ReMUD.Game.Structures
         public short Energy;
         public short HPRegen;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityA;
+        public short[] AbilityId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityB;
+        public short[] AbilityValue;
         public short GameLimit;
         public short Active;
         public short Type;

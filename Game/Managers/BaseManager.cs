@@ -16,6 +16,12 @@ namespace ReMUD.Game.Managers
 
         public abstract ushort Initialize(string path);
         public abstract ushort Close();
+        public abstract K Select(T id);
+        public virtual ushort Reload() { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
+
+        public virtual ushort Update(K record) { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
+        public virtual ushort Delete(K record) { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
+        public virtual ushort Insert(K record) { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
 
         public K GetNullContent()
         {
@@ -30,9 +36,7 @@ namespace ReMUD.Game.Managers
             }
         }
 
-        public abstract K Select(T id);
-
-        public K BaseSelect(string id)
+        protected K BaseSelect(string id)
         {
             if(Contents.ContainsKey(id) == true)
             {
@@ -42,7 +46,7 @@ namespace ReMUD.Game.Managers
             return default(K);
         }
 
-        public K BaseSelect(int id)
+        protected K BaseSelect(int id)
         {
             if (Contents.ContainsKey(id) == true)
             {
@@ -51,8 +55,5 @@ namespace ReMUD.Game.Managers
 
             return default(K);
         }
-
-        public virtual ushort Save(K record) { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
-        public virtual ushort Reload() { return Btrieve.BtrieveTypes.BtrieveStatus.I_O_ERROR; }
     }
 }

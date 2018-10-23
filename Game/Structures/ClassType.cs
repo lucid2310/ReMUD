@@ -18,7 +18,7 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public short[] Ignore_One;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityNumber;
+        public short[] AbilityId;
         public short MagicType;
         public short MagicLevel;
         public short WeaponType;

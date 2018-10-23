@@ -53,7 +53,7 @@ namespace ReMUD.Game.Structures
         public short Weight;
         public short Type;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
-        public short[] AbilityNumber;
+        public short[] AbilityId;
         public short Uses;
         public short Ignore14;
         public short Cost;

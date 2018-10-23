@@ -81,9 +81,9 @@ namespace ReMUD.Game
 
             if (spell.HasValue == true)
             {
-                for (int i = 0; i < spell.Value.AbilityA.Length; i++)
+                for (int i = 0; i < spell.Value.AbilityId.Length; i++)
                 {
-                    if (spell.Value.AbilityA[i] == abilityId)
+                    if (spell.Value.AbilityId[i] == abilityId)
                     {
                         return true;
                     }
@@ -1292,12 +1292,289 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _create_player()
+        public PlayerType _create_player(string username)
         {
+            PlayerType player = ContentManager.Select<PlayerManager>().Select(username);
 
-            //TODO: Insert Logic.
+            if (player.Username == null)
+            {
+                player.unknown1 = new short[2];
+                player.Unknown2 = new short[2];
+                player.Unknown3 = new byte[2];
+                player.unknown4 = new int[4];
+                player.Offset_544 = new byte[6];
+                player.Offset_6B8 = new short[8];
+
+
+                player.SetUserName(username);
+                player.SetFirstName(username);
+
+                player.Race = 0;
+                player.Class = 0;
+                player.Level = 1;
+                player.NotExperience = 0;
+                player.Stats.Intellect = 5;
+                player.Stats.WillPower = 5;
+                player.Stats.Strength = 5;
+                player.Stats.Health = 5;
+                player.Stats.Agility = 5;
+                player.Stats.Charm = 5;
+                player.Stats.MaxIntellect = 5;
+                player.Stats.MaxWillPower = 5;
+                player.Stats.MaxStrength = 5;
+                player.Stats.MaxHealth = 5;
+                player.Stats.MaxAgility = 5;
+                player.Stats.MaxCharm = 5;
+                player.MaximumHitpoints = 10;
+                player.CurrentHitpoints = 10;
+                player.WeaponHand = 0;
+                player.Currency.Runic = 0;
+                player.Currency.Platinum = 0;
+                player.Currency.Gold = 0;
+                player.Currency.Silver = 0;
+                player.Currency.Copper = 0;
+                player.MaximumEncumbrance = 0x1F4;
+                player.CurrentEncumbrance = 0;
+
+                player.Energy = new short[3];
+          
+                player.Energy[0] = GameConstants.MAX_ENERGY_LEVEL;
+                player.Energy[1] = GameConstants.MAX_ENERGY_LEVEL;
+                player.Energy[2] = GameConstants.MAX_ENERGY_LEVEL;
+
+                player.unknown1[0] = 0x7D;
+                player.unknown1[1] = 0;
+                player.MagicRes = 0;
+                player.MagicRes2 = 0;
+                player.MapNumber = 0x01;
+                player.RoomNum = 0x85C;
+                player.Nothing2 = 0;
+
+                player.Offset_6B8[2] = 0;
+
+               
+                player.Unknown2[0] = GameConstants.MAX_ENERGY_LEVEL;
+                player.Unknown2[1] = GameConstants.MAX_ENERGY_LEVEL;
+
+                player.Nothing3 = 0;
+                player.Unknown3[0] = 0;
+                player.Unknown3[1] = 100;
+                player.unknown4[2] = 0;
+                player.unknown4[4] = 0;
+                player.Offset_7C4[6] = 0;
+
+                player.BillionsOfExperience = 0;
+                player.MillionsOfExperience = 0;
+
+                int tmpIndex = 0;
+
+                player.Item = new int[100];
+                player.ItemUses = new short[100];
+
+                do
+                {
+                    player.Item[tmpIndex] = 0;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 100);
+
+                tmpIndex = 0;
+
+                do
+                {
+                    player.ItemUses[tmpIndex] = -1;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 100);
+
+                //TODO: Figure out what nothing5 is, maxnumber of keys?
+                player.Offset_330 = 50;
+
+                tmpIndex = 0;
+
+                player.Key = new int[50];
+                player.KeyUses = new short[50];
+
+                do
+                {
+                    player.Key[tmpIndex] = 0;
+                    player.KeyUses[tmpIndex] = -2;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 50);
+
+                player.MaximumKnownSpells = 100;
+                player.Spell = new short[100];
+
+                tmpIndex = 0;
+
+                do
+                {
+                    player.Spell[tmpIndex] = 0;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 100);
+
+                player.Offset_544[0] = 0;
+
+                tmpIndex = 0;
+
+                //TODO: figure what this offset is for?
+                do
+                {
+                    player.Offset_544[tmpIndex] = 0;
+                    tmpIndex++;
+                }
+                while (tmpIndex < 6);
+
+                player.Offset_54A[2] = 0;
+
+
+                tmpIndex = 0;
+                player.LastMap = new int[20];
+                player.LastRoom = new int[20];
+
+                // Reset the last map / room of the player.
+                do
+                {
+                    player.LastMap[tmpIndex] = 0;
+                    player.LastRoom[tmpIndex] = 0;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 20);
+
+                player.BroadcastChannel = 0;
+                player.BriefVerboseFlag = 1;
+                player.TalkSpeed = 1;
+                player.Statline = 2;
+
+                player.Offset_5F6 = 0;
+                player.Perception = 0;
+                player.Stealth = 0;
+                player.MartialArts = 0;
+                player.Thievery = 0;
+                player.MaxMana = 0;
+                player.CurrentMana = 0;
+                player.SpellCasting = 0;
+                player.Traps = 0;
+                player.Offset_608 = 0;
+                player.Picklocks = 0;
+                player.Tracking = 0;
+
+                tmpIndex = 0;
+
+                player.WornItem = new int[20];
+                player.WornItemUses = new short[20];
+
+                do
+                {
+                    player.WornItem[tmpIndex] = 0;
+                    player.WornItemUses[tmpIndex] = -1;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 20);
+
+                player.Offset_6A4 = 1;
+                player.LivesRemaining = 9;
+                player.Offset_6A8 = 0;
+                player.Offset_6AA = 0xFFFF;
+                player.Offset_6AC = 0;
+
+                tmpIndex = 0;
+
+                player.PartyMembers = new short[5];
+
+                do
+                {
+                    player.PartyMembers[tmpIndex] = -1;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 5);
+
+                tmpIndex = 0;
+
+                player.SpellCasted = new short[10];
+                player.SpellValue = new short[10];
+                player.SpellRoundsLeft = new short[10];
+
+                do
+                {
+                    player.SpellCasted[tmpIndex] = 0;
+                    player.SpellValue[tmpIndex] = 0;
+                    player.SpellRoundsLeft[tmpIndex] = 0;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 10);
+
+                player.Offset_6B8[0] = 0;
+                player.Offset_6B8[1] = -1;
+                player.Offset_6EC[4] = 0;
+                player.Offset_7C4[2] = 0;
+                player.Offset_6EC[5] = -1;
+                player.Offset_6DC[5] = 1;
+                player.bEDITED = 0;
+                player.Offset_6FD = 0;
+                player.Offset_6FE[0] = 0;
+
+                //0x700
+                player.Offset_6FE[1] = 16 | 0x400;
+                player.Offset_6FE[2] = 0x03;
+                player.Offset_6FE[2] = 0x03 << 8 | 0x03;
+                player.Offset_6FE[3] = 0;
+                player.Offset_6FE[0] = 3;
+
+                player.SetTitle("Apprentice");
+
+  
+                //ecx33 = reinterpret_cast < unsigned char> (esi12) << 3;
+                //eax34 = g479104;
+                //*reinterpret_cast<void***>(eax34 + (ecx33 + ecx33 * 2) * 8) = reinterpret_cast<void**>(0);
+                //ecx35 = reinterpret_cast < unsigned char> (esi12) << 3;
+                //eax36 = g479104;
+                //*reinterpret_cast<int32_t*>(reinterpret_cast<uint32_t>(eax36 + (ecx35 + ecx35 * 2) * 8) + 4) = 0;
+                //ecx37 = reinterpret_cast < unsigned char> (esi12) << 3;
+                //eax38 = g479104;
+                //*reinterpret_cast<int32_t*>(reinterpret_cast<uint32_t>(eax38 + (ecx37 + ecx37 * 2) * 8) + 8) = 0;
+                //ecx39 = reinterpret_cast<void***>(reinterpret_cast < unsigned char > (esi12) << 3);
+                //ecx40 = reinterpret_cast<void**>(ecx39 + reinterpret_cast<uint32_t>(ecx39) * 2);
+                //eax41 = g479104;
+                //*reinterpret_cast<int32_t*>(reinterpret_cast<uint32_t>(eax41 + reinterpret_cast < unsigned char > (ecx40) * 8) + 0x9c) = 0;
+
+                short tmpEvilPoints = _get_saved_evil_points(username);
+
+                player.EvilPoints = tmpEvilPoints;
+                player.unknown12e[11] = 22;
+
+
+                tmpIndex = 0;
+
+                player.AbilityId = new short[30];
+                player.AbilityValue = new short[30];
+
+                do
+                {
+                    player.AbilityId[tmpIndex] = 0;
+                    player.AbilityValue[tmpIndex] = 0;
+                    ++tmpIndex;
+                }
+                while (tmpIndex < 30);
+
+
+                player.CharLife = 0;
+
+                //*reinterpret_cast<void***>(ebx14 + 0x724) = reinterpret_cast<void**>(0);
+                //*reinterpret_cast<void***>(ebx14 + 0x7c0) = reinterpret_cast<void**>(0);
+                //*reinterpret_cast<void***>(ebx14 + 0x7dc) = reinterpret_cast<void**>(0);
+                //*reinterpret_cast < unsigned char*> (ebx14 + 0x7c4) = 0;
+                //eax44 = fun_478c4c(0, v10, v8, v6);
+                //*reinterpret_cast<uint16_t*>(ebx14 + 0x7c6) = *reinterpret_cast<uint16_t*>(&eax44);
+                //eax15 = _update_user_with_permanent_info(0, ebx14);
+                //*reinterpret_cast < unsigned char*> (ebx14 + 0x7d4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (ebx14 + 0x7d4) | 0x80);
+                //*reinterpret_cast < unsigned char*> (ebx14 + 0x7d4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (ebx14 + 0x7d4) | 0x2000);
+            }
+
+            return player;
         }
-
         public void _decrement_evil_timers()
         {
 
@@ -1986,13 +2263,15 @@ namespace ReMUD.Game
                 playerType = _get_player(userId);
             }
 
-            if (playerType.Ability == null)
+            if (playerType.AbilityId == null)
             {
                 coinWeight = 0;
             }
             else
             {
-                coinWeight = (playerType.Runic / 3 +  playerType.Platinum / 3 + playerType.Gold / 3 + playerType.Silver / 3 + playerType.Copper / 3);
+                coinWeight = (playerType.Currency.Runic / 3 +  playerType.Currency.Platinum / 3 +
+                              playerType.Currency.Gold / 3 + playerType.Currency.Silver / 3 +
+                              playerType.Currency.Copper / 3);
             }
 
             return coinWeight;
@@ -2193,10 +2472,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_saved_evil_points()
+        public short _get_saved_evil_points(string username)
         {
-
-            //TODO: Insert Logic.
+            return 0;
         }
 
         public void _get_shop_data()
@@ -2217,10 +2495,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_spell_from_name()
+        public string _get_spell_from_name(int spellId)
         {
-
-            //TODO: Insert Logic.
+            return ContentManager.Select<SpellManager>().Select(spellId).GetName();
         }
 
         public void _get_spell_match_type()
@@ -2265,11 +2542,11 @@ namespace ReMUD.Game
                 {
                     SpellType spellType = _get_spell_data(player.SpellCasted[i]).Value;
 
-                    for (int s = 0; s < spellType.AbilityA.Length; s++)
+                    for (int s = 0; s < spellType.AbilityId.Length; s++)
                     {
-                        if (spellType.AbilityA[s] == abilityId)
+                        if (spellType.AbilityId[s] == abilityId)
                         {
-                            totalValue += spellType.AbilityB[s];
+                            totalValue += spellType.AbilityValue[s];
                         }
                     }
                 }
@@ -2279,31 +2556,31 @@ namespace ReMUD.Game
             // 2. Check Race Data, if there is no race ability, then
             RaceType raceType = _get_race_data(player.Race);
 
-            for (int i = 0; i < raceType.AbilityA.Length; i++)
+            for (int i = 0; i < raceType.AbilityId.Length; i++)
             {
-                if (raceType.AbilityA[i] == abilityId)
+                if (raceType.AbilityId[i] == abilityId)
                 {
-                    totalValue += raceType.AbilityB[i];
+                    totalValue += raceType.AbilityValue[i];
                 }
             }
 
             ClassType classType = _get_class_data(player.Class);
 
             // 2.a Check Class Data, TODO: the origal logic shows either race or class ability is checked, not both.
-            for (int i = 0; i < classType.AbilityNumber.Length; i++)
+            for (int i = 0; i < classType.AbilityId.Length; i++)
             {
-                if (classType.AbilityNumber[i] == abilityId)
+                if (classType.AbilityId[i] == abilityId)
                 {
                     totalValue += classType.AbilityValue[i];
                 }
             }
 
             // 3 Check player ability.
-            for (int i = 0; i < player.Ability.Length; i++)
+            for (int i = 0; i < player.AbilityId.Length; i++)
             {
-                if (player.Ability[i] == abilityId)
+                if (player.AbilityId[i] == abilityId)
                 {
-                    totalValue += player.AbilityModifier[i];
+                    totalValue += player.AbilityValue[i];
                 }
             }
 
@@ -2314,9 +2591,9 @@ namespace ReMUD.Game
                 {
                     ItemType itemType = _get_item_data(player.WornItem[i]);
 
-                    for (int s = 0; s < itemType.AbilityNumber.Length; s++)
+                    for (int s = 0; s < itemType.AbilityId.Length; s++)
                     {
-                        if (itemType.AbilityNumber[s] == abilityId)
+                        if (itemType.AbilityId[s] == abilityId)
                         {
                             totalValue += itemType.AbilityValue[s];
                         }
@@ -2329,9 +2606,9 @@ namespace ReMUD.Game
             {
                 ItemType itemType = _get_item_data(player.WeaponHand);
 
-                for (int i = 0; i < itemType.AbilityNumber.Length; i++)
+                for (int i = 0; i < itemType.AbilityId.Length; i++)
                 {
-                    if (itemType.AbilityNumber[i] == abilityId)
+                    if (itemType.AbilityId[i] == abilityId)
                     {
                         totalValue += itemType.AbilityValue[i];
                     }
@@ -3734,9 +4011,9 @@ namespace ReMUD.Game
                 {
                     SpellType spellType = _get_spell_data(player.SpellCasted[i]).Value;
 
-                    for (int s = 0; s < spellType.AbilityA.Length; s++)
+                    for (int s = 0; s < spellType.AbilityId.Length; s++)
                     { 
-                        if(spellType.AbilityA[s] == abilityId)
+                        if(spellType.AbilityId[s] == abilityId)
                         {
                             return true;
                         }
@@ -3748,9 +4025,9 @@ namespace ReMUD.Game
             // 2. Check Race Data, if there is no race ability, then
             RaceType raceType = _get_race_data(player.Race);
 
-            for(int i = 0; i < raceType.AbilityA.Length; i++)
+            for(int i = 0; i < raceType.AbilityId.Length; i++)
             {
-                if(raceType.AbilityA[i] == abilityId)
+                if(raceType.AbilityId[i] == abilityId)
                 {
                     return true;
                 }
@@ -3759,18 +4036,18 @@ namespace ReMUD.Game
             ClassType classType = _get_class_data(player.Class);
 
             // 2.a Check Class Data, TODO: the origal logic shows either race or class ability is checked, not both.
-            for (int i = 0; i < classType.AbilityNumber.Length; i++)
+            for (int i = 0; i < classType.AbilityId.Length; i++)
             {
-                if (classType.AbilityNumber[i] == abilityId)
+                if (classType.AbilityId[i] == abilityId)
                 {
                     return true;
                 }
             }
 
             // 3 Check player ability.
-            for(int i = 0; i < player.Ability.Length; i++)
+            for(int i = 0; i < player.AbilityId.Length; i++)
             {
-                if(player.Ability[i] == abilityId)
+                if(player.AbilityId[i] == abilityId)
                 {
                     return true;
                 }
@@ -3783,9 +4060,9 @@ namespace ReMUD.Game
                 {
                     ItemType itemType = _get_item_data(player.WornItem[i]);
 
-                    for(int s = 0; s < itemType.AbilityNumber.Length; s++)
+                    for(int s = 0; s < itemType.AbilityId.Length; s++)
                     {
-                        if(itemType.AbilityNumber[s] == abilityId)
+                        if(itemType.AbilityId[s] == abilityId)
                         {
                             return true;
                         }
@@ -3798,9 +4075,9 @@ namespace ReMUD.Game
             {
                 ItemType itemType = _get_item_data(player.WeaponHand);
 
-                for (int i = 0; i < itemType.AbilityNumber.Length; i++)
+                for (int i = 0; i < itemType.AbilityId.Length; i++)
                 {
-                    if (itemType.AbilityNumber[i] == abilityId)
+                    if (itemType.AbilityId[i] == abilityId)
                     {
                         return true;
                     }

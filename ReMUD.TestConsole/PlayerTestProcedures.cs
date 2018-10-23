@@ -8,12 +8,9 @@ namespace ReMUD.TestConsole
     public class PlayerTestProcedures
     {
         private Game.GameManager GameManager = new Game.GameManager();
-        UserManager userManager = new UserManager();
 
         public void Setup()
-        {
-            //ContentManager.Initialize(TestConstants.GetAbsolutePath());
-
+        { 
             GameManager._init__wccmmud(@"C:\WGSERV");
         }
 
@@ -23,8 +20,9 @@ namespace ReMUD.TestConsole
 
             int id = GameManager.ContentManager.UserContentManager.GetUserId("Sysop");
 
-            int encPercent = GameManager._get_encumbrance_percent(id);
+            PlayerType player = GameManager.ContentManager.Select<PlayerManager>().Select("Sysop");
 
+            GameManager.ContentManager.Select<PlayerManager>().Delete(player);
 
         }
 
@@ -32,7 +30,7 @@ namespace ReMUD.TestConsole
         {
             PlayerType playerType = GameManager.ContentManager.Select<PlayerManager>().Select("Sysop");
 
-            playerType.Ability[0] = AbilityTypes.FindTraps;
+            playerType.AbilityId[0] = AbilityTypes.FindTraps;
 
          
             bool hasAbility = GameManager._user_has_ability(playerType, AbilityTypes.FindTraps);

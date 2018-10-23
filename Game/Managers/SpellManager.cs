@@ -88,7 +88,7 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
-        public override ushort Save(SpellType record)
+        public override ushort Update(SpellType record)
         {
             ushort status = BTRCALL(BtrieveTypes.BtrieveActionType.BGETEQUAL, PositionBlock,
                                     ref ProxyRecordData, ref RecordSize, record.Number, KEY_BUF_LEN, 0);

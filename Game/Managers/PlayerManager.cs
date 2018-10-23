@@ -100,7 +100,7 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
-        public ushort Insert(PlayerType player)
+        public override ushort Insert(PlayerType player)
         {
             Status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
                             ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
@@ -108,7 +108,14 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
-        public override ushort Save(PlayerType player)
+
+        public override ushort Delete(PlayerType player)
+        {
+            return BTRCALL(BtrieveTypes.BtrieveActionType.BDELETE, PositionBlock,
+                                    ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
+        }
+
+        public override ushort Update(PlayerType player)
         {
             return BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
                                     ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
