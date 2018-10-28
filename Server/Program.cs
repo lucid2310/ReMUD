@@ -9,19 +9,35 @@ namespace ReMUD.Server
     {
         public static void Main(string[] args)
         {
+            Random rand = new Random();
+
             string rootDirectory = @"C:\Projects\GIT\ReMUD\DATs";
             rootDirectory = @"C:\WGSERV";
 
-            
+            //string[] FirstNames = { "John", "Peter", "Jason", "Andrew", "Richard" };
+            //string[] LastNames = { "Lannister", "Targaryen", "Snow", "Stark", "Mormont", "Tarly", "Greyjoy" };
+
+            //int indexFirstName = rand.Next(FirstNames.Length);
+            //int indexLastName = rand.Next(LastNames.Length);
+
             GameManager gameManager = new GameManager();
 
             gameManager._init__wccmmud(rootDirectory);
 
-            PlayerType newPlayer = gameManager._create_player("Maxx_One");
+            PlayerType player = gameManager.ContentManager.Select<PlayerManager>().Select("Lucid");
 
-            gameManager.ContentManager.Select<PlayerManager>().Insert(newPlayer);
+            //string rngName = FirstNames[indexFirstName] + "_" + LastNames[indexLastName];
+
+            //PlayerType newPlayer = gameManager._create_player(rngName);
+
+            //gameManager.ContentManager.Select<PlayerManager>().Insert(newPlayer);
+
+            gameManager._calculate_secondary_stats(ref player);
+
 
             Console.Read();
         }
+
+      
     }
 }

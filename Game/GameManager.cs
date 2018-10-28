@@ -93,37 +93,17 @@ namespace ReMUD.Game
             return false;
         }
 
-        public sbyte _user_is_wearing(PlayerType ecx, object a2, int itemId)
+        public bool _user_is_wearing(PlayerType player, object a2, int itemId)
         {
-            int ebx4;
-            PlayerType? edx8 = null;
-            int eax9;
-
-            ebx4 = itemId;
-            // eax7 = _get_player(ecx, a2, ebx5, ebp6, __return_address());
-            //  edx8 = eax7;
-
-            if (edx8 != null)
+            for(int i = 0; i < player.WornItem.Length; i++)
             {
-                return 0;
-            }
-            else
-            {
-                eax9 = 0;
-
-                do
+                if(player.WornItem[i].Equals(itemId) == true)
                 {
-                    if (ebx4 == edx8.Value.WornItem[eax9])
-                    {
-                        break;
-                    }
-
-                    ++eax9;
-
-                } while (eax9 < 20);
+                    return true;
+                }
             }
 
-            return 1;
+            return false;
         }
 
         public void _add_cast_spell_to_monster()
@@ -459,15 +439,44 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _calculate_secondary_stats(string username)
+        public void _calculate_secondary_stats(ref PlayerType player)
         {
-            PlayerType player = ContentManager.Select<PlayerManager>().Select(username);
-
-            // FindTraps
             bool status = _user_has_ability(player, AbilityTypes.FindTraps);
 
+            long resultOne = (((((player.Level)))) / 10 + (((player.PrimaryStats.MaxIntellect)) & 0xffffffce) / 10 +
+                (((player.PrimaryStats.MaxAgility)) & 0xffffffce) / 20 + ((((player.PrimaryStats.MaxCharm)) & 0xffffffce) / 30));
 
+            if (resultOne <= 75)
+            {
+                if (resultOne < 1)
+                {
+                    resultOne = 1;
+                }
+            }
+            else
+            {
+                resultOne = 75;
+            }
 
+            int dodgeValue = _get_user_ability_value(player, AbilityTypes.Dodge);
+            int crits = _get_user_ability_value(player, AbilityTypes.CriticalHit);
+
+            var maxCharm = player.PrimaryStats.MaxCharm / 10;
+            var maxAgility = player.PrimaryStats.MaxAgility / 5;
+            var playerLvel = player.Level / 5;
+
+            dodgeValue = (int)(((((dodgeValue) + ((resultOne) + (crits))) + (maxCharm)) + (maxAgility)) + (playerLvel));
+
+            player.MartialArts = (short)(dodgeValue);
+
+            bool hasJumpKick = _user_has_ability(player, AbilityTypes.JumpKick);
+
+            if (hasJumpKick == true)
+            {
+                short jkResult = (short)((player.MartialArts) + ((player.Level)));
+                jkResult = (short)((jkResult) + (jkResult));
+                player.MartialArts = jkResult;
+            }
         }
 
         public void _can_see()
@@ -1296,16 +1305,8 @@ namespace ReMUD.Game
         {
             PlayerType player = ContentManager.Select<PlayerManager>().Select(username);
 
-            if (player.Username == null)
+            if (player.GetUsername().Length == 0)
             {
-                player.unknown1 = new short[2];
-                player.Unknown2 = new short[2];
-                player.Unknown3 = new byte[2];
-                player.unknown4 = new int[4];
-                player.Offset_544 = new byte[6];
-                player.Offset_6B8 = new short[8];
-
-
                 player.SetUserName(username);
                 player.SetFirstName(username);
 
@@ -1313,18 +1314,19 @@ namespace ReMUD.Game
                 player.Class = 0;
                 player.Level = 1;
                 player.NotExperience = 0;
-                player.Stats.Intellect = 5;
-                player.Stats.WillPower = 5;
-                player.Stats.Strength = 5;
-                player.Stats.Health = 5;
-                player.Stats.Agility = 5;
-                player.Stats.Charm = 5;
-                player.Stats.MaxIntellect = 5;
-                player.Stats.MaxWillPower = 5;
-                player.Stats.MaxStrength = 5;
-                player.Stats.MaxHealth = 5;
-                player.Stats.MaxAgility = 5;
-                player.Stats.MaxCharm = 5;
+                player.CPRemaining = 100;
+                player.PrimaryStats.Intellect = 5;
+                player.PrimaryStats.WillPower = 5;
+                player.PrimaryStats.Strength = 5;
+                player.PrimaryStats.Health = 5;
+                player.PrimaryStats.Agility = 5;
+                player.PrimaryStats.Charm = 5;
+                player.PrimaryStats.MaxIntellect = 5;
+                player.PrimaryStats.MaxWillPower = 5;
+                player.PrimaryStats.MaxStrength = 5;
+                player.PrimaryStats.MaxHealth = 5;
+                player.PrimaryStats.MaxAgility = 5;
+                player.PrimaryStats.MaxCharm = 5;
                 player.MaximumHitpoints = 10;
                 player.CurrentHitpoints = 10;
                 player.WeaponHand = 0;
@@ -1335,9 +1337,7 @@ namespace ReMUD.Game
                 player.Currency.Copper = 0;
                 player.MaximumEncumbrance = 0x1F4;
                 player.CurrentEncumbrance = 0;
-
-                player.Energy = new short[3];
-          
+               
                 player.Energy[0] = GameConstants.MAX_ENERGY_LEVEL;
                 player.Energy[1] = GameConstants.MAX_ENERGY_LEVEL;
                 player.Energy[2] = GameConstants.MAX_ENERGY_LEVEL;
@@ -1348,28 +1348,24 @@ namespace ReMUD.Game
                 player.MagicRes2 = 0;
                 player.MapNumber = 0x01;
                 player.RoomNum = 0x85C;
-                player.Nothing2 = 0;
+               // player.Nothing2 = 0;
 
-                player.Offset_6B8[2] = 0;
+               // player.Offset_6B8[2] = 0;
+             
+               // player.Unknown2[0] = GameConstants.MAX_ENERGY_LEVEL;
+               // player.Unknown2[1] = GameConstants.MAX_ENERGY_LEVEL;
 
-               
-                player.Unknown2[0] = GameConstants.MAX_ENERGY_LEVEL;
-                player.Unknown2[1] = GameConstants.MAX_ENERGY_LEVEL;
-
-                player.Nothing3 = 0;
-                player.Unknown3[0] = 0;
-                player.Unknown3[1] = 100;
-                player.unknown4[2] = 0;
-                player.unknown4[4] = 0;
-                player.Offset_7C4[6] = 0;
+               // player.Nothing3 = 0;
+               // player.Unknown3[0] = 0;
+               // player.Unknown3[1] = 100;
+               // player.unknown4[2] = 0;
+               ////player.unknown4[4] = 0;
+               // player.Offset_7C4[6] = 0;
 
                 player.BillionsOfExperience = 0;
                 player.MillionsOfExperience = 0;
 
                 int tmpIndex = 0;
-
-                player.Item = new int[100];
-                player.ItemUses = new short[100];
 
                 do
                 {
@@ -1388,12 +1384,9 @@ namespace ReMUD.Game
                 while (tmpIndex < 100);
 
                 //TODO: Figure out what nothing5 is, maxnumber of keys?
-                player.Offset_330 = 50;
+                //player.Offset_330 = 50;
 
                 tmpIndex = 0;
-
-                player.Key = new int[50];
-                player.KeyUses = new short[50];
 
                 do
                 {
@@ -1404,7 +1397,6 @@ namespace ReMUD.Game
                 while (tmpIndex < 50);
 
                 player.MaximumKnownSpells = 100;
-                player.Spell = new short[100];
 
                 tmpIndex = 0;
 
@@ -1415,24 +1407,18 @@ namespace ReMUD.Game
                 }
                 while (tmpIndex < 100);
 
-                player.Offset_544[0] = 0;
-
                 tmpIndex = 0;
 
                 //TODO: figure what this offset is for?
                 do
                 {
-                    player.Offset_544[tmpIndex] = 0;
+                 //   player.Offset_544[tmpIndex] = 0;
                     tmpIndex++;
                 }
                 while (tmpIndex < 6);
 
-                player.Offset_54A[2] = 0;
-
 
                 tmpIndex = 0;
-                player.LastMap = new int[20];
-                player.LastRoom = new int[20];
 
                 // Reset the last map / room of the player.
                 do
@@ -1448,7 +1434,7 @@ namespace ReMUD.Game
                 player.TalkSpeed = 1;
                 player.Statline = 2;
 
-                player.Offset_5F6 = 0;
+                //player.Offset_5F6 = 0;
                 player.Perception = 0;
                 player.Stealth = 0;
                 player.MartialArts = 0;
@@ -1457,14 +1443,11 @@ namespace ReMUD.Game
                 player.CurrentMana = 0;
                 player.SpellCasting = 0;
                 player.Traps = 0;
-                player.Offset_608 = 0;
+               // player.Offset_608 = 0;
                 player.Picklocks = 0;
                 player.Tracking = 0;
 
                 tmpIndex = 0;
-
-                player.WornItem = new int[20];
-                player.WornItemUses = new short[20];
 
                 do
                 {
@@ -1474,28 +1457,22 @@ namespace ReMUD.Game
                 }
                 while (tmpIndex < 20);
 
-                player.Offset_6A4 = 1;
+               // player.Offset_6A4 = 1;
                 player.LivesRemaining = 9;
-                player.Offset_6A8 = 0;
-                player.Offset_6AA = 0xFFFF;
-                player.Offset_6AC = 0;
+                //player.Offset_6A8 = 0;
+                //player.Offset_6AA = 0xFFFF;
+                //player.Offset_6AC = 0;
 
                 tmpIndex = 0;
 
-                player.PartyMembers = new short[5];
-
                 do
                 {
-                    player.PartyMembers[tmpIndex] = -1;
+                    player.PartyMember[tmpIndex] = -1;
                     ++tmpIndex;
                 }
                 while (tmpIndex < 5);
 
                 tmpIndex = 0;
-
-                player.SpellCasted = new short[10];
-                player.SpellValue = new short[10];
-                player.SpellRoundsLeft = new short[10];
 
                 do
                 {
@@ -1506,22 +1483,22 @@ namespace ReMUD.Game
                 }
                 while (tmpIndex < 10);
 
-                player.Offset_6B8[0] = 0;
-                player.Offset_6B8[1] = -1;
-                player.Offset_6EC[4] = 0;
-                player.Offset_7C4[2] = 0;
-                player.Offset_6EC[5] = -1;
-                player.Offset_6DC[5] = 1;
+                //player.Offset_6B8[0] = 0;
+                //player.Offset_6B8[1] = -1;
+                //player.Offset_6EC[4] = 0;
+                //player.Offset_7C4[2] = 0;
+                //player.Offset_6EC[5] = -1;
+                //player.Offset_6DC[5] = 1;
                 player.bEDITED = 0;
-                player.Offset_6FD = 0;
-                player.Offset_6FE[0] = 0;
+                //player.Offset_6FD = 0;
+                //player.Offset_6FE[0] = 0;
 
                 //0x700
-                player.Offset_6FE[1] = 16 | 0x400;
-                player.Offset_6FE[2] = 0x03;
-                player.Offset_6FE[2] = 0x03 << 8 | 0x03;
-                player.Offset_6FE[3] = 0;
-                player.Offset_6FE[0] = 3;
+                //player.Offset_6FE[1] = 16 | 0x400;
+                //player.Offset_6FE[2] = 0x03;
+                //player.Offset_6FE[2] = 0x03 << 8 | 0x03;
+                //player.Offset_6FE[3] = 0;
+                //player.Offset_6FE[0] = 3;
 
                 player.SetTitle("Apprentice");
 
@@ -1543,18 +1520,14 @@ namespace ReMUD.Game
                 short tmpEvilPoints = _get_saved_evil_points(username);
 
                 player.EvilPoints = tmpEvilPoints;
-                player.unknown12e[11] = 22;
-
+               // player.unknown12e[11] = 22;
 
                 tmpIndex = 0;
 
-                player.AbilityId = new short[30];
-                player.AbilityValue = new short[30];
-
                 do
                 {
-                    player.AbilityId[tmpIndex] = 0;
-                    player.AbilityValue[tmpIndex] = 0;
+                    player.AbilityId[tmpIndex] = (short)tmpIndex;
+                    player.AbilityValue[tmpIndex] = (short)(tmpIndex + 1);
                     ++tmpIndex;
                 }
                 while (tmpIndex < 30);
@@ -2252,26 +2225,19 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public int _get_coin_weight(int userId)
+        public int _get_coin_weight(PlayerType player)
         {
             int coinWeight = 0;
 
-            PlayerType playerType = new PlayerType();
-
-            if (userId != 0)
-            {
-                playerType = _get_player(userId);
-            }
-
-            if (playerType.AbilityId == null)
+            if (player.AbilityId == null)
             {
                 coinWeight = 0;
             }
             else
             {
-                coinWeight = (playerType.Currency.Runic / 3 +  playerType.Currency.Platinum / 3 +
-                              playerType.Currency.Gold / 3 + playerType.Currency.Silver / 3 +
-                              playerType.Currency.Copper / 3);
+                coinWeight = (player.Currency.Runic / 3 + player.Currency.Platinum / 3 +
+                              player.Currency.Gold / 3 + player.Currency.Silver / 3 +
+                              player.Currency.Copper / 3);
             }
 
             return coinWeight;
@@ -2289,39 +2255,32 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public int _get_encumbrance_percent(int userId)
+        public int _get_encumbrance_percent(ref PlayerType player)
         {
-            PlayerType playerType = new PlayerType();
-   
-            if (userId > 0)
-            {
-                playerType = _get_player(userId);
-            }
-
-            if (playerType.Username == null)
+            if (player.Username == null)
             {
                 return 100;
             }
             else
             {
                 // 1. Get the coin weight.
-                int coinWeight = _get_coin_weight(userId);
+                int coinWeight = _get_coin_weight(player);
 
                 // 2. result_one = coint weight + player + CurrentEncumberance * 100.
-                int resultOne = coinWeight + playerType.CurrentEncumbrance * 100;
+                int resultOne = coinWeight + player.CurrentEncumbrance * 100;
 
                 // 3. get max weight.
-                int maxWeight = _get_max_weight(userId);
+                int maxWeight = _get_max_weight(player);
 
                 // 4. result_two = result_one / max_weight.
                 int resultTwo = resultOne / maxWeight;
 
                 // 5. 0x708 = result_two.
                 // return 0x708.
-                playerType.EncumbrancePercent = (short)resultTwo;
+                player.EncumbrancePercent = (short)resultTwo;
             }
 
-            return playerType.EncumbrancePercent;
+            return player.EncumbrancePercent;
         }
 
         public void _get_gang_data()
@@ -2408,14 +2367,13 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public int _get_max_weight(int userId)
+        public int _get_max_weight(PlayerType player)
         {
             int maxWeight = 0;
-            PlayerType playerType = _get_player(userId);
-        
-            int encumbranceModifier = _get_user_ability_value(userId, AbilityTypes.Encumbrance);
+
+            int encumbranceModifier = _get_user_ability_value(player, AbilityTypes.Encumbrance);
     
-            maxWeight = (encumbranceModifier + 100) * playerType.MaximumEncumbrance / 100;
+            maxWeight = (encumbranceModifier + 100) * player.MaximumEncumbrance / 100;
 
             return maxWeight;
         }
@@ -2524,10 +2482,8 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public int _get_user_ability_value(int userId, int abilityId)
+        public int _get_user_ability_value(PlayerType player, int abilityId)
         {
-            PlayerType player = _get_player(userId);
-
             if(abilityId == AbilityTypes.Speed)
             {
                 // TODO: Implement logic for "Speed" ability.

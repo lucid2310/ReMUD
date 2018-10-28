@@ -9,9 +9,7 @@ namespace ReMUD.Game.Structures
 {
     public struct ItemType
     {
-        // Integer = short (c#)
-        // string array = char array
-        // long = int
+        //<start>
         public int Number;
         public short Ignore1;
         public short GameLimit;
@@ -105,5 +103,6 @@ namespace ReMUD.Game.Structures
         public byte Robable;
         public byte DestroyOnDeath;
         public short Ignore25;
+        //<stop>
     }
 }

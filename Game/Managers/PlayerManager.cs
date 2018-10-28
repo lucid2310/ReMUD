@@ -23,8 +23,6 @@ namespace ReMUD.Game.Managers
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] char[] keyBffer,
         ushort keyLength, ushort keyNum);
 
-        public string[] PlayerKeys = new string[0];
-
         public override ushort Initialize(string path)
         {
             List<string> playerKeys = new List<string>();
@@ -41,7 +39,7 @@ namespace ReMUD.Game.Managers
 
                 PlayerType RecordData = new PlayerType();
 
-                RecordSize = Marshal.SizeOf(RecordData);
+                RecordSize = 2028;// Marshal.SizeOf(RecordData);
 
                 Status = BTRCALL(BtrieveTypes.BtrieveActionType.BOPEN,
                         PositionBlock, ref RecordData,
@@ -54,8 +52,6 @@ namespace ReMUD.Game.Managers
                 if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                 {
                     Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
-
-                    playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.Username));
                 }
                 else
                 {
@@ -81,7 +77,6 @@ namespace ReMUD.Game.Managers
                     if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                     {
                         Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
-                        playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.Username));
                     }
                     else
                     { 
@@ -105,6 +100,11 @@ namespace ReMUD.Game.Managers
             Status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
                             ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
 
+            if(Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
+            {
+                LogManager.Log("Created new player {0}", player.GetUsername());
+            }
+
             return Status;
         }
 
@@ -117,6 +117,9 @@ namespace ReMUD.Game.Managers
 
         public override ushort Update(PlayerType player)
         {
+            // update the local copy.
+            Contents.Update(player.GetUsername(), player);
+
             return BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
                                     ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
         }
@@ -130,7 +133,16 @@ namespace ReMUD.Game.Managers
 
         public override PlayerType Select(string id)
         {
-            return BaseSelect(id);
+            PlayerType player = new PlayerType();
+
+            player = BaseSelect(id);
+
+            if(player.Username == null)
+            {
+                return player.Initialize();
+            }
+
+            return player;
         }
     }
 }

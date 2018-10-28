@@ -1,0 +1,36 @@
+      
+
+        int resultOne = (((((player.Level)))) / 10 + (((player.MaxIntellect)) & 0xffffffce) / 10 + (((player.MaxAgility)) & 0xffffffce) / 20 + ((((player.MaxCharm)) & 0xffffffce) / 30));
+      
+        if (resultOne <= 75)
+        {
+            if (resultOne < 1)
+            {
+                resultOne = 1;
+            }
+        } 
+        else 
+        {
+            resultOne = 75;
+        }
+
+        (player + 0x710) = resultOne;
+
+        dodgeValue = _get_user_ability_value(ecx97, Dodge, 0xff, player, 0, 0);
+
+        maxCharm = player.MaxCharm / 10;   
+        maxAgility = player.MaxAgility / 5;     
+        playerLvel = player.Level / 5;
+
+        dodgeValue = (((((dodgeValue) + ((resultOne) + (ebx9 + 0x7b4))) + (maxCharm)) + (maxAgility)) + (playerLvel));
+
+        (player.MartialArts) = (dodgeValue);
+
+        eax8 = _user_has_ability(dodgeValue, JumpKick, 0xff, ebx9, edi5, esi6, ebx7);
+
+        if (*reinterpret_cast<signed char*>(&eax8))
+        {
+            (&eax8) = ((player.MartialArts) + ((player.Level)));
+            eax8 = ((eax8) + (eax8));
+            player.MartialArts = eax8;
+        }
