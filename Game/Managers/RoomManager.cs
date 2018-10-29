@@ -112,6 +112,19 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
+        public RoomType Select(int mapid, int roomId)
+        {
+            if(Contents.Storage.ContainsKey(mapid) == true)
+            {
+                if(Contents.Storage[mapid].ContainsKey(roomId) == true)
+                {
+                    return Contents.Storage[mapid][roomId];
+                }
+            }
+
+            return new RoomType();
+        }
+
         public override Dictionary<int, RoomType> Select(int id)
         {
             throw new NotImplementedException();

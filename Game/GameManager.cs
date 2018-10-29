@@ -479,10 +479,55 @@ namespace ReMUD.Game
             }
         }
 
-        public void _can_see()
+        public void _can_see(int x, PlayerType player, int y, int offset, RoomType room)
         {
+            uint eax6 = 0;
+            uint a4 = 0;
+            string outputMessage = string.Empty;
 
-            //TODO: Insert Logic.
+           // if (!((room.Light) & 16))
+            {
+                eax6 = (uint)_get_light_level(player);
+
+                a4 = eax6;
+
+                if (a4 >= 0xffffff6a)
+                {
+                    if (a4 <= 0x384)
+                    {
+                        eax6 = 1;
+                    } 
+                else 
+                {
+                        uint v7 = a5;
+
+
+                        outputMessage = sprintf("%s\r", v7, edi8, esi9);
+
+                        _tell_user(outputMessage, a2);
+
+                        eax6 = 0;
+                    }
+                } 
+            else
+            {
+                    v10 = a5;
+                    outputMessage = sprintf("The room is %s - you can't see anything\r", v10, edi8, esi9);
+                    _tell_user(outputMessage, player);
+                    eax6 = 0;
+                }
+            } 
+        else
+        {
+                outputMessage = sprintf("You are blind.\r", edi8, esi9, ebx11);
+                _tell_user("You are blind.\r", player, player);
+                eax6 = 0;
+            }
+        }
+
+        public string sprintf(string message, params object[] arguments)
+        {
+            return string.Format(message, arguments);
         }
 
         public void _can_sneak()
@@ -1289,10 +1334,72 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _convert_currency()
+        public ulong _convert_currency(int runic, int platinum, int gold, int silver, int copper)
         {
+            ulong tmpCopper;
+            int tmpSilver;
+            int tmpGold;
+            int tmpPlatinum;
 
-            //TODO: Insert Logic.
+            int totalRunic;
+            int totalPlatinum;
+            int totalGold;
+            int totalSilver;
+
+            tmpCopper = (ulong)copper;
+            tmpSilver = silver;
+            tmpGold = gold;
+            tmpPlatinum = platinum;
+
+            totalRunic = runic * 100;
+
+            if ((totalRunic) < (runic))
+            {
+                totalRunic = runic;
+            }
+
+            if ((tmpPlatinum) <= ((totalRunic) + (tmpPlatinum)))
+            {
+                tmpPlatinum = ((tmpPlatinum) + (totalRunic));
+            }
+
+            totalPlatinum = ((tmpPlatinum) * (100));
+
+            if ((tmpPlatinum) > (totalPlatinum))
+            {
+                totalPlatinum = tmpPlatinum;
+            }
+
+            if ((tmpGold) <= ((totalPlatinum) + (tmpGold)))
+            {
+                tmpGold = ((tmpGold) + (totalPlatinum));
+            }
+
+            totalGold = ((tmpGold) * (10));
+
+            if ((tmpGold) > (totalGold))
+            {
+                totalGold = tmpGold;
+            }
+
+            if ((tmpSilver) <= ((totalGold) + (tmpSilver)))
+            {
+                tmpSilver = ((tmpSilver) + (totalGold));
+            }
+
+            totalSilver = ((tmpSilver) * (10));
+
+            if ((tmpSilver) > (totalSilver))
+            {
+                totalSilver = tmpSilver;
+            }
+
+            if ((tmpCopper) <= ((ulong)(totalSilver) + (tmpCopper)))
+            {
+                tmpCopper = ((tmpCopper) + (ulong)(totalSilver));
+            }
+
+            return tmpCopper;
         }
 
         public void _count_valid_targets()
@@ -1347,7 +1454,7 @@ namespace ReMUD.Game
                 player.MagicRes = 0;
                 player.MagicRes2 = 0;
                 player.MapNumber = 0x01;
-                player.RoomNum = 0x85C;
+                player.RoomNumber = 0x85C;
                // player.Nothing2 = 0;
 
                // player.Offset_6B8[2] = 0;
@@ -2295,10 +2402,19 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_item_ability_value()
+        public int _get_item_ability_value(ItemType item, int abilityId)
         {
+            int abilityValue = 0;
 
-            //TODO: Insert Logic.
+            for(int i = 0; i < item.AbilityId.Length; i++)
+            {
+                if(item.AbilityId[i] == abilityId)
+                {
+                    abilityValue += item.AbilityValue[i];
+                }
+            }
+
+            return abilityValue;
         }
 
         public ItemType _get_item_data(int itemId)
@@ -2352,7 +2468,26 @@ namespace ReMUD.Game
         public void _get_last_spell_number()
         {
 
-            //TODO: Insert Logic.
+        //        ebp2 = reinterpret_cast<void*>(reinterpret_cast<int32_t>(__zero_stack_offset()) - 4);
+
+        //        ebx3 = reinterpret_cast<void**>(0);
+
+        //        v4 = g479130;
+        //        fun_478ade(ecx);
+
+        //        v5 = reinterpret_cast<void**>(reinterpret_cast<int32_t>(ebp2) + 0xfffffefc);
+
+        //        ax6 = fun_478be0(v5, 0, 0, 13, 0, v5, 0, 0, 13, 0);
+
+        //        if (ax6)
+        //        {
+        //            eax7 = fun_478c2e(v4, 0, 0);
+        //            fun_478b6e(v4, reinterpret_cast<int32_t>(ebp2) + 0xfffffefc, eax7, 0, 0);
+        //            ebx3 = reinterpret_cast<void**>(static_cast<uint32_t>(v8));
+        //        }
+
+        //        fun_478af0();
+            
         }
 
         public void _get_legal_level()
@@ -2361,10 +2496,25 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_light_level()
+        public int _get_light_level(PlayerType player)
         {
+            int lightLevel = 0;
 
-            //TODO: Insert Logic.
+            int mapId = player.MapNumber;
+            int roomId = player.RoomNumber;
+
+            RoomType room = _get_room_data(mapId, roomId);
+
+            if(room.MapNumber > 0)
+            {
+                int roomLightLevel = room.Light;
+                int playerLightLevel = _get_user_ability_value(player, AbilityTypes.Illuminate);
+
+                int totalLightLevel = roomLightLevel + playerLightLevel;
+
+            }
+
+            return lightLevel;
         }
 
         public int _get_max_weight(PlayerType player)
@@ -2424,10 +2574,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_room_data()
+        public RoomType _get_room_data(int mapId, int roomId)
         {
-
-            //TODO: Insert Logic.
+            return ContentManager.Select<RoomManager>().Select(mapId, roomId);
         }
 
         public short _get_saved_evil_points(string username)
@@ -2447,10 +2596,27 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_spell_ability_value()
+        /// <summary>
+        /// Used to obtain the total value for an ability on the spell.
+        /// </summary>
+        /// <param name="spellId">The spelld id to look up.</param>
+        /// <param name="abilityId">The ability id to tally up.</param>
+        /// <returns>Total for a specific ability.</returns>
+        public int _get_spell_ability_value(int spellId, int abilityId)
         {
+            int abilityValue = 0;
 
-            //TODO: Insert Logic.
+            SpellType spell = _get_spell_data(spellId).Value;
+
+            for(int i = 0; i < spell.AbilityId.Length; i++)
+            {
+                if(spell.AbilityId[i] == abilityId)
+                {
+                    abilityValue += spell.AbilityValue[i];
+                }
+            }
+
+            return abilityValue;
         }
 
         public string _get_spell_from_name(int spellId)
@@ -2571,14 +2737,17 @@ namespace ReMUD.Game
                 }
             }
 
-
             return totalValue;
         }
 
-        public void _get_user_currency()
+        public ulong _get_user_currency(PlayerType player)
         {
+            ulong totalCurrency = 0;
 
-            //TODO: Insert Logic.
+            totalCurrency = _convert_currency(player.Currency.Runic, player.Currency.Platinum, player.Currency.Gold,
+                                              player.Currency.Silver, player.Currency.Copper);
+            
+            return totalCurrency;
         }
 
         public void _get_user_number()
@@ -2736,10 +2905,19 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _item_has_ability()
+        public bool _item_has_ability(int itemId, int abilityId)
         {
+            ItemType item = _get_item_data(itemId);
 
-            //TODO: Insert Logic.
+            for(int i = 0; i < item.AbilityId.Length; i++)
+            {
+                if(item.AbilityId[i] == abilityId)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void _item_is_in_stock()
@@ -3808,10 +3986,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _tell_user()
+        public void _tell_user(string message, PlayerType fromPlayer, PlayerType toPlayer)
         {
-
-            //TODO: Insert Logic.
+            // send message from player to player.
         }
 
         public void _terminate_multiple_matches()

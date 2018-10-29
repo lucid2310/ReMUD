@@ -14,6 +14,6 @@ namespace ReMUD.Game.Structures.SupportTypes
         public const int Dodge = 34;
         public const int JumpKick = 35;
         public const int CriticalHit = 58;
-
+        public const int Illuminate = 13;
     }
 }

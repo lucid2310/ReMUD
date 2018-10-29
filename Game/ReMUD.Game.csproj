@@ -110,6 +110,7 @@
     <Compile Include="Structures\UserType.cs" />
     <Compile Include="Structures\Utilities\BtrieveUtility.cs" />
     <Compile Include="Structures\Utilities\TextUtility.cs" />
+    <Compile Include="Tests\PlayerTestProcedures.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="WBTRV32.DLL">

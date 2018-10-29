@@ -139,7 +139,7 @@ namespace ReMUD.Game.Managers
 
             if(player.Username == null)
             {
-                return player.Initialize();
+                return PlayerType.Initialize();
             }
 
             return player;

@@ -9,6 +9,7 @@ namespace ReMUD.Game.Structures
 {
     public struct RoomType
     {
+        //<start>
         public int MapNumber;
         public int RoomNumber;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 253)]
@@ -87,5 +88,6 @@ namespace ReMUD.Game.Structures
         public short unknown70;
         public byte NumMons;
         public byte unknown71;
+        //<stop>
     }
 }

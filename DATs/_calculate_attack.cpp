@@ -128,7 +128,7 @@ int32_t* _calculate_attack(struct s0* a1, struct s1* a2)
         
         if (ecx6) 
         {
-            eax8 = (ecx6 + 100) * a1->f24;
+            eax8 = (ecx6 + 100) * a1->f24; // WeaponNumber, mainhand.
             __asm__("cdq ");
             a1->f24 = eax8 / 100;
             __asm__("cdq ");
