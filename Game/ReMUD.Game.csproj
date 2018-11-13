@@ -42,7 +42,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -106,8 +106,10 @@
     <Compile Include="Structures\SupportTypes\InventoryType.cs" />
     <Compile Include="Structures\SupportTypes\PlayerStatType.cs" />
     <Compile Include="Structures\SupportTypes\StatType.cs" />
+    <Compile Include="Structures\SupportTypes\TextMsgTypes.cs" />
     <Compile Include="Structures\TextBlockType.cs" />
     <Compile Include="Structures\UserType.cs" />
+    <Compile Include="Structures\Utilities\AnsiUtility.cs" />
     <Compile Include="Structures\Utilities\BtrieveUtility.cs" />
     <Compile Include="Structures\Utilities\TextUtility.cs" />
     <Compile Include="Tests\PlayerTestProcedures.cs" />

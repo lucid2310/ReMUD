@@ -12,11 +12,10 @@ using System.Threading.Tasks;
 
 namespace ReMUD.Game.Structures
 {
-    // Conversion from VB to C#
-    //            Long = Int
-    //            Int = Short
+
     public struct PlayerType
     {
+        //<start>
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public char[] Username;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 11)]
@@ -35,45 +34,51 @@ namespace ReMUD.Game.Structures
         public short Race;
         public short Class;
         public short Level;
-        public PlayerStatType PrimaryStats;
+        public short Intellect;
+        public short WillPower;
+        public short Strength;
+        public short Health;
+        public short Agility;
+        public short Charm;
+        public short MaxIntellect;
+        public short MaxWillPower;
+        public short MaxStrength;
+        public short MaxHealth;
+        public short MaxAgility;
+        public short MaxCharm;
         public short MaximumHitpoints;
         public short CurrentHitpoints;
         public short MaximumEncumbrance;
         public short CurrentEncumbrance;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public short[] Energy;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public short[] unknown1;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
+        public byte[] OffSet_xBC_xBE;
         public short MagicRes;
         public short MagicRes2;
         public int MapNumber;
         public int RoomNumber;
-        public short Nothing2;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public short[] Unknown2;
-        public short Nothing3;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        public byte[] Unknown3;
-        public short Nothing4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        public byte[] OffSet_xCC_xD7;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public int[] Item;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public short[] ItemUses;
-        public int nothing5;
+        public int OffSet_x330;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
         public int[] Key;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
         public short[] KeyUses;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public int[] unknown4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        public byte[] OffSet_x460_x46F;
         public int BillionsOfExperience;
         public int MillionsOfExperience;
         public short MaximumKnownSpells;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 100)]
         public short[] Spell;
         public short EvilPoints;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public int[] nothing7;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        public byte[] OffSet_x544_54F;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public int[] LastMap;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
@@ -95,54 +100,60 @@ namespace ReMUD.Game.Structures
         public short Picklocks;
         public short Tracking;
         public short nothing9;
-        public CurrencyType Currency;
+        public int Runic;
+        public int Platinum;
+        public int Gold;
+        public int Silver;
+        public int Copper;
         public int WeaponHand;
-        public int nothing10;
+        public int OffSet_x628;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public int[] WornItem;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public short[] WornItemUses;
-        public short unknown8;
+        public short OffSet_x6A4;
         public short LivesRemaining;
-
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
-        public short[] unknown9;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
+        public byte[] OffSet_x6A8_x6AD;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
         public short[] PartyMember;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public short[] unknownFiller;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
+        public byte[] OffSet_x6B8_x6BA;
+        public byte Delay;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 12)]
+        public byte[] OffSet_x6BC_x6C7;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public char[] GangName;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
-        public byte[] unknown11;
+        public byte[] OffSet_x6DC_x6E1;
         public short CPRemaining;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         public char[] SuicidePassword;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
-        public short[] unknown12a;
-        public byte bEDITED;
-        public byte unknown12c;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 5)]
-        public short[] unknown12d;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        public byte[] OffSet_x6EC_x6FB;
+        public byte EditFlag;
+        public byte OffSet_x6FD;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
+        public byte[] OffSet_x6FE_x707;
         public short EncumbrancePercent;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
-        public short[] unknown12e;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 48)]
+        public byte[] OffSet_x70A_x739;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public short[] AbilityId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public short[] AbilityValue;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
-        public short[] unknown13a;
-        public int CharLife;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
-        public short[] unknown13;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 14)]
+        public byte[] OffSet_x7B2_x7BF;
+        public int CharacterLife;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 18)]
+        public byte[] OffSet_x7C4_x7D5;
         public byte Bitmask1;
         public byte Bitmask2;
         public byte TestFlag1;
         public byte TestFlag2;
-        public short unknown14;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        public int[] unknown15;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 18)]
+        public byte[] OffSet_x7DA_x7EB;
+        //<stop>
 
         public byte[] Serialize()
         {
@@ -179,40 +190,9 @@ namespace ReMUD.Game.Structures
             return BtrieveUtility.ConvertToString(Username);
         }
 
-        //public static void PrintStats(PlayerType player)
-        //{
-        //    List<string> outputText = new List<string>();
-        //    string tmpValue = string.Empty;
-        //    string tmpName = string.Empty;
-
-        //    FieldInfo[] fi = typeof(PlayerType).GetFields(BindingFlags.Public | BindingFlags.Instance);
-
-        //    foreach (FieldInfo info in fi)
-        //    {
-        //        string tmpType = info.FieldType.Name;
-        //        object tmpData = info.GetValue(player);
-
-        //        switch (tmpType)
-        //        {
-        //            case "Char[]":                        
-        //                tmpValue = BtrieveUtility.ConvertToString((char[])tmpData);
-        //                break;
-        //            case "Int32[]":
-        //                tmpValue = BtrieveUtility.ConvertIntArrayToStringArray((int[])tmpData);
-        //                break;
-        //            case "Int16[]":
-        //                tmpValue = BtrieveUtility.ConvertIntArrayToStringArray((short[])tmpData);
-        //                break;
-        //            case "Byte[]":
-        //                tmpValue = BtrieveUtility.ConvertIntArrayToStringArray((byte[])tmpData);
-        //                break;
-        //            default:
-        //                tmpValue = info.GetValue(player).ToString();
-        //                break;
-        //        }
-
-        //        LogManager.Log("{0}, {1}", info.Name, tmpValue);
-        //    }
-        //}
+        public static bool Validate(PlayerType player)
+        {
+            return player.Username != null;
+        }
     }
 }

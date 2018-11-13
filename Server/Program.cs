@@ -21,9 +21,9 @@ namespace ReMUD.Server
             //int indexFirstName = rand.Next(FirstNames.Length);
             //int indexLastName = rand.Next(LastNames.Length);
 
-            // GameManager gameManager = new GameManager();
+        //    GameManager gameManager = new GameManager();
 
-            //gameManager._init__wccmmud(rootDirectory);
+          //  gameManager._init__wccmmud(rootDirectory);
 
             //PlayerType player = gameManager.ContentManager.Select<PlayerManager>().Select("Lucid");
 
@@ -38,6 +38,13 @@ namespace ReMUD.Server
             PlayerTestProcedures.ConvertCurrency_TC01();
             PlayerTestProcedures.ConvertCurrency_TC02();
             PlayerTestProcedures.GetCoinWeight_TC01();
+            PlayerTestProcedures.CheckPlayerStruction_TC01();
+
+            GameManager gameManager = new GameManager();
+           // gameManager._init__wccmmud(rootDirectory);
+
+            gameManager._edit_character_stats();
+
 
             Console.Read();
         }

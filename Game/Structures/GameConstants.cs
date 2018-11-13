@@ -12,5 +12,8 @@ namespace ReMUD.Game.Structures
         public const int PLATINUM_MULTIPLIER = 100;
         public const int GOLD_MULTIPLIER = 10;
         public const int SILVER_MULTIPLIER = 10;
+        public const int INVENTORY_MAX = 100;
+        public const int KEY_MAX = 50;
+        public const int WORN_MAX = 20;
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ReMUD.Game.Structures.SupportTypes
 {
     public struct PlayerStatType
-    {       
+    {   //<start>   
         public short Intellect;
         public short WillPower;
         public short Strength;
@@ -19,6 +19,7 @@ namespace ReMUD.Game.Structures.SupportTypes
         public short MaxStrength;
         public short MaxHealth;
         public short MaxAgility;
-        public short MaxCharm;        
+        public short MaxCharm;
+        //<stop>
     }
 }

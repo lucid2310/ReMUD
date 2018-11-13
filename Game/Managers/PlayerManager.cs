@@ -39,7 +39,7 @@ namespace ReMUD.Game.Managers
 
                 PlayerType RecordData = new PlayerType();
 
-                RecordSize = 2028;// Marshal.SizeOf(RecordData);
+                RecordSize = Marshal.SizeOf(RecordData);
 
                 Status = BTRCALL(BtrieveTypes.BtrieveActionType.BOPEN,
                         PositionBlock, ref RecordData,

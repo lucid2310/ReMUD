@@ -5,6 +5,11 @@ using ReMUD.Game.Structures;
 using ReMUD.Game.Structures.SupportTypes;
 using ReMUD.Game.Structures.Utilities;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Net.Sockets;
+using System.Text;
 
 namespace ReMUD.Game
 {
@@ -14,7 +19,8 @@ namespace ReMUD.Game
     public class GameManager
     {
         public MetaContentManager ContentManager = new MetaContentManager();
-
+        private int _nextBuffer = 0;
+        
         public void _internal_error(string message, params object[] parameters)
         {
             LogManager.Log(message, parameters);
@@ -118,10 +124,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _add_delay()
+        public void _add_delay(PlayerType player, byte delay)
         {
-
-            //TODO: Insert Logic.
+            player.Delay += delay;         
         }
 
         public void _add_delayed_command()
@@ -169,7 +174,6 @@ namespace ReMUD.Game
         public void _add_item_to_inventory()
         {
 
-            //TODO: Insert Logic.
         }
 
         public void _add_item_to_room()
@@ -222,9 +226,87 @@ namespace ReMUD.Game
 
         public void _add_to_group(string username)
         {
-           // PlayerEntity player = GameContentManager.PlayerContentManager.GetPlayer(username);
+            // PlayerEntity player = GameContentManager.PlayerContentManager.GetPlayer(username);
 
-
+            //edi5 = a3;
+            //eax9 = _get_player(ecx, a2, edi6, esi7, ebx8);
+            //ecx10 = a2;
+            //esi11 = eax9;
+            //edx12 = 0;
+            //eax13 = 0;
+            //if (edi5 != a2)
+            //{
+            //    if (esi11)
+            //    {
+            //        ebx14 = 0;
+            //        while (!*reinterpret_cast < signed char*> (&eax13) && ebx14 < 5) {
+            //            ecx10 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx14 * 2) + 0x6ae)));
+            //            if (edi5 == ecx10)
+            //            {
+            //                *reinterpret_cast < signed char*> (&eax13) = 1;
+            //            }
+            //            ++ebx14;
+            //        }
+            //        if (*reinterpret_cast < signed char*> (&eax13)) 
+            //    goto addr_41e0ef_9;
+            //        if (!a4)
+            //            goto addr_41e0cc_11;
+            //    }
+            //    else
+            //    {
+            //        eax15 = 0;
+            //        goto addr_41e164_13;
+            //    }
+            //}
+            //else
+            //{
+            //    eax15 = 0;
+            //    goto addr_41e164_13;
+            //}
+            //addr_41e0ef_9:
+            //if (!*reinterpret_cast < signed char*> (&eax13) || !a4) {
+            //    eax15 = edx12;
+            //} else {
+            //    ebx16 = 0;
+            //    do
+            //    {
+            //        eax17 = _usrnum;
+            //        v18 = *reinterpret_cast<void***>(eax17);
+            //        _tell_user(ecx10, v18, v18);
+            //        ecx10 = v18;
+            //        if (*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx16 * 2) + 0x6ae) != -1)
+            //        {
+            //            v19 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx16 * 2) + 0x6ae)));
+            //            _add_to_group(ecx10, v19, a2, 0);
+            //            edi20 = 0;
+            //            do
+            //            {
+            //                if (*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + edi20 * 2) + 0x6ae) != -1)
+            //                {
+            //                    v21 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + edi20 * 2) + 0x6ae)));
+            //                    v22 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx16 * 2) + 0x6ae)));
+            //                    _add_to_group(ecx10, v22, v21, 0);
+            //                }
+            //                ++edi20;
+            //            } while (edi20 < 5);
+            //        }
+            //        ++ebx16;
+            //    } while (ebx16 < 5);
+            //    *reinterpret_cast < signed char*> (&eax15) = 1;
+            //}
+            //addr_41e164_13:
+            //return *reinterpret_cast < signed char*> (&eax15);
+            //addr_41e0cc_11:
+            //ebx23 = 0;
+            //while (!*reinterpret_cast < signed char*> (&edx12) && ebx23 < 5) {
+            //    if (*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx23 * 2) + 0x6ae) == -1)
+            //    {
+            //        *reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi11 + ebx23 * 2) + 0x6ae) = *reinterpret_cast<int16_t*>(&edi5);
+            //        *reinterpret_cast < signed char*> (&edx12) = 1;
+            //    }
+            //    ++ebx23;
+            //}
+            //goto addr_41e0ef_9;
 
 
         }
@@ -443,8 +525,8 @@ namespace ReMUD.Game
         {
             bool status = _user_has_ability(player, AbilityTypes.FindTraps);
 
-            long resultOne = (((((player.Level)))) / 10 + (((player.PrimaryStats.MaxIntellect)) & 0xffffffce) / 10 +
-                (((player.PrimaryStats.MaxAgility)) & 0xffffffce) / 20 + ((((player.PrimaryStats.MaxCharm)) & 0xffffffce) / 30));
+            long resultOne = (((((player.Level)))) / 10 + (((player.MaxIntellect)) & 0xffffffce) / 10 +
+                (((player.MaxAgility)) & 0xffffffce) / 20 + ((((player.MaxCharm)) & 0xffffffce) / 30));
 
             if (resultOne <= 75)
             {
@@ -461,8 +543,8 @@ namespace ReMUD.Game
             int dodgeValue = _get_user_ability_value(player, AbilityTypes.Dodge);
             int crits = _get_user_ability_value(player, AbilityTypes.CriticalHit);
 
-            var maxCharm = player.PrimaryStats.MaxCharm / 10;
-            var maxAgility = player.PrimaryStats.MaxAgility / 5;
+            var maxCharm = player.MaxCharm / 10;
+            var maxAgility = player.MaxAgility / 5;
             var playerLvel = player.Level / 5;
 
             dodgeValue = (int)(((((dodgeValue) + ((resultOne) + (crits))) + (maxCharm)) + (maxAgility)) + (playerLvel));
@@ -481,48 +563,69 @@ namespace ReMUD.Game
 
         public void _can_see(int x, PlayerType player, int y, int offset, RoomType room)
         {
-            uint eax6 = 0;
-            uint a4 = 0;
-            string outputMessage = string.Empty;
 
-           // if (!((room.Light) & 16))
+            int lightLevel = 0;
+
+            lightLevel = _get_light_level(player);
+
+            if(lightLevel >= -149)
             {
-                eax6 = (uint)_get_light_level(player);
-
-                a4 = eax6;
-
-                if (a4 >= 0xffffff6a)
+                if(lightLevel <= 0x384)
                 {
-                    if (a4 <= 0x384)
-                    {
-                        eax6 = 1;
-                    } 
-                else 
+                    lightLevel = 1;
+
+                }
+                else
                 {
-                        uint v7 = a5;
-
-
-                        outputMessage = sprintf("%s\r", v7, edi8, esi9);
-
-                        _tell_user(outputMessage, a2);
-
-                        eax6 = 0;
-                    }
-                } 
+                    lightLevel = 0;
+                }
+            }
             else
             {
-                    v10 = a5;
-                    outputMessage = sprintf("The room is %s - you can't see anything\r", v10, edi8, esi9);
-                    _tell_user(outputMessage, player);
-                    eax6 = 0;
-                }
-            } 
-        else
-        {
-                outputMessage = sprintf("You are blind.\r", edi8, esi9, ebx11);
-                _tell_user("You are blind.\r", player, player);
-                eax6 = 0;
+
             }
+        //    uint eax6 = 0;
+        //    uint a4 = 0;
+        //    string outputMessage = string.Empty;
+
+        //   // if (!((room.Light) & 16))
+        //    {
+        //        eax6 = (uint)_get_light_level(player);
+
+        //        a4 = eax6;
+
+        //        if (a4 >= 0xffffff6a)
+        //        {
+        //            if (a4 <= 0x384)
+        //            {
+        //                eax6 = 1;
+        //            } 
+        //        else 
+        //        {
+        //                uint v7 = a5;
+
+
+        //                outputMessage = sprintf("%s\r", v7, edi8, esi9);
+
+        //                _tell_user(outputMessage, a2);
+
+        //                eax6 = 0;
+        //            }
+        //        } 
+        //    else
+        //    {
+        //            v10 = a5;
+        //            outputMessage = sprintf("The room is %s - you can't see anything\r", v10, edi8, esi9);
+        //            _tell_user(outputMessage, player);
+        //            eax6 = 0;
+        //        }
+        //    } 
+        //else
+        //{
+        //        outputMessage = sprintf("You are blind.\r", edi8, esi9, ebx11);
+        //        _tell_user("You are blind.\r", player, player);
+        //        eax6 = 0;
+        //    }
         }
 
         public string sprintf(string message, params object[] arguments)
@@ -1124,7 +1227,7 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _cmd_look()
+        public void _cmd_look(PlayerType player)
         {
 
             //TODO: Insert Logic.
@@ -1292,10 +1395,305 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _cmd_use()
+        public void _cmd_use(PlayerType player, string command)
         {
-
-            //TODO: Insert Logic.
+    //        ebp4 = reinterpret_cast<void*>((uint)(__zero_stack_offset()) - 4);
+    //        v5 = ebx6;
+    //        v7 = esi8;
+    //        v9 = edi10;
+    //        edi11 = a3;
+    //        esi12 = a2;
+    //        v13 = (1);
+    //        if (esi12)
+    //        {
+    //            edx14 = _margc;
+    //            if (!reinterpret_cast<int1_t>((edx14) == 1))
+    //            {
+    //                fun_478ba4(ecx);
+    //                ecx15 = _margv;
+    //                v16 = (ecx15 + 4);
+    //                eax17 = _usrnum;
+    //                v18 = (eax17);
+    //                eax19 = _find_item_in_inventory(ecx15, v18, v16, (uint)(ebp4) + 0xfffffff8, (uint)(ebp4) + 0xfffffff4, (uint)(ebp4) + 0xffffffee, (uint)(ebp4) + 0xffffffdc, 4);
+    //                if (1)
+    //                {
+    //                    _terminate_multiple_matches(ecx15, 1);
+    //                    if (!eax19 || !v20)
+    //                    {
+    //                        if (!eax19 || v21)
+    //                        {
+    //                            if (edi11 != 0x6e)
+    //                            {
+    //                                v22 = (esi12 + 0xc4);
+    //                                v23 = (esi12 + 0xc8);
+    //                                eax24 = _get_room_data(v23, v22, v9, v7, v5, v23, v22, v9, v7, v5);
+    //                                if (!eax24 || (!(eax24 + 0x5b4) || (v25 = (eax24 + 0x5b4), edx26 = _usrnum, v27 = (edx26), al28 = _perform_special_command(1, v27, v25), al28 == 0)))
+    //                                {
+    //                                    fun_478c28(0x48c3f3, v9, v7, v5, 0x48c3f3, v9, v7, v5);
+    //                                    edx29 = _margv;
+    //                                    v30 = (edx29 + 4);
+    //                                    fun_478c28("You don't have %s.\r", v30, v9, v7, "You don't have %s.\r", v30, v9, v7);
+    //                                    ecx31 = _usrnum;
+    //                                    v32 = (ecx31);
+    //                                    _tell_user(ecx31, v32);
+    //                                }
+    //                                else
+    //                                {
+    //                                    ecx33 = _usrnum;
+    //                                    v34 = (ecx33);
+    //                                    _prf_prompt(ecx33, v34);
+    //                                    eax35 = _usrnum;
+    //                                    v36 = (eax35);
+    //                                    _tell_user(v34, v36, v36);
+    //                                    eax37 = (1);
+    //                                    goto addr_46126c_10;
+    //                                }
+    //                            }
+    //                            else
+    //                            {
+    //                                *reinterpret_cast < unsigned char*> (esi12 + 0x6f4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x6f4) & 0xfbff);
+    //                                *reinterpret_cast < unsigned char*> (esi12 + 0x7c8) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x7c8) & 0xfeff);
+    //                                eax38 = _cmd_look(1, esi12, edi11);
+    //                                v13 = eax38;
+    //                            }
+    //                        }
+    //                        else
+    //                        {
+    //                            fun_478c28(0x48c3f3, v9, v7, v5, 0x48c3f3, v9, v7, v5);
+    //                            fun_478c28("There are no more uses in %s.\r", eax19 + 0xad, v9, v7, "There are no more uses in %s.\r", eax19 + 0xad, v9, v7);
+    //                            eax39 = _usrnum;
+    //                            v40 = (eax39);
+    //                            _tell_user(0x48c3f3, v40, v40);
+    //                        }
+    //                    }
+    //                    else
+    //                    {
+    //                        v41 = (eax19);
+    //                        al42 = _user_can_use(1, esi12, eax19);
+    //                        if (al42)
+    //                        {
+    //                            eax43 = _get_item_data(v41, v41);
+    //                            ecx44 = v41;
+    //                            ebx45 = eax43;
+    //                            if (*reinterpret_cast < unsigned char*> (ebx45 + 0x398) >= 1) {
+    //                                edx46 = 0;
+    //                                eax47 = 0;
+    //                                do
+    //                                {
+    //                                    ecx44 = (uint(esi12 + eax47 * 4) + 0x62c);
+    //                                    if (ecx44 == (ebx45))
+    //                                    {
+    //                                        *reinterpret_cast < signed char*> (&edx46) = 1;
+    //                                    }
+    //                                    ++eax47;
+    //                                } while (eax47 < 20);
+    //                                if (*reinterpret_cast < signed char*> (&edx46)) 
+    //                            goto addr_460ee7_20;
+    //                                fun_478c28("You must be wearing that item to use it!\r", v9, v7, v5);
+    //                                eax48 = _usrnum;
+    //                                v49 = (eax48);
+    //                                _tell_user("You must be wearing that item to use it!\r", v49, v49);
+    //                                eax37 = (1);
+    //                                goto addr_46126c_10;
+    //                            } else {
+    //                                if (*reinterpret_cast<uint16_t*>(ebx45 + 0x2f4) != 1 || (ebx45) == (esi12 + 0x624))
+    //                                {
+    //                                    addr_460ee7_20:
+    //                                    fun_478c58(ecx44);
+    //                                    edx50 = _margc;
+    //                                    ecx51 = (edx50);
+    //                                    if (!reinterpret_cast<int1_t>(ecx51 == &v52->f1))
+    //                                    {
+    //                                        fun_478ba4(ecx51);
+    //                                        if (*reinterpret_cast<uint16_t*>(ebx45 + 0x2f4) == 7)
+    //                                            goto addr_461054_24;
+    //                                        ecx53 = _margv;
+    //                                        v54 = (uint(ecx53 + v55 * 4) + 4);
+    //                                        v56 = (esi12 + 0xc4);
+    //                                        v57 = (esi12 + 0xc8);
+    //                                        eax58 = _find_action_target(v57, v56, v54, (uint)(ebp4) + 0xffffffe4, (uint)(ebp4) + 0xffffffe0, (uint)(ebp4) + 0xffffffdc, 0xf037);
+    //                                        if (!(v59 & 32))
+    //                                            goto addr_460fa1_26;
+    //                                        else
+    //                                            goto addr_460f8f_27;
+    //                                    }
+    //                                    else
+    //                                    {
+    //                                        if (*reinterpret_cast<uint16_t*>(ebx45 + 0x2f4) != 6)
+    //                                        {
+    //                                            edx60 = _usrnum;
+    //                                            v61 = (edx60);
+    //                                            al62 = _use_no_target(ecx51, ebx45, v61, edi11);
+    //                                            v63 = al62;
+    //                                            goto addr_461138_30;
+    //                                        }
+    //                                        else
+    //                                        {
+    //                                            *reinterpret_cast < unsigned char*> (esi12 + 0x6f4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x6f4) & 0xfbff);
+    //                                            *reinterpret_cast < unsigned char*> (esi12 + 0x7c8) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x7c8) & 0xfeff);
+    //                                            eax37 = _cmd_light(ecx51, esi12, edi11);
+    //                                            goto addr_46126c_10;
+    //                                        }
+    //                                    }
+    //                                }
+    //                                else
+    //                                {
+    //                                    fun_478c28("You must have that item readied to use it!\r", v9, v7, v5, "You must have that item readied to use it!\r", v9, v7, v5);
+    //                                    ecx64 = _usrnum;
+    //                                    v65 = (ecx64);
+    //                                    _tell_user(ecx64, v65);
+    //                                    eax37 = (1);
+    //                                    goto addr_46126c_10;
+    //                                }
+    //                            }
+    //                        }
+    //                        else
+    //                        {
+    //                            fun_478c28("You may not use that item!\r", v9, v7, v5, "You may not use that item!\r", v9, v7, v5);
+    //                            ecx66 = _usrnum;
+    //                            v67 = (ecx66);
+    //                            _tell_user(ecx66, v67);
+    //                            eax37 = (1);
+    //                            goto addr_46126c_10;
+    //                        }
+    //                    }
+    //                }
+    //                else
+    //                {
+    //                    _terminate_multiple_matches(ecx15, 0);
+    //                    eax37 = (1);
+    //                    goto addr_46126c_10;
+    //                }
+    //            }
+    //            else
+    //            {
+    //                if (edi11 != 0x6e)
+    //                {
+    //                    fun_478c28("%sSyntax: USE {Item to use} [{target}]\r", 0x48c3f3, v9, v7);
+    //                }
+    //                else
+    //                {
+    //                    fun_478c28("%sSyntax: Read {Item}\r", 0x48c3f3, v9, v7);
+    //                }
+    //                ecx68 = _usrnum;
+    //                v69 = (ecx68);
+    //                _tell_user(ecx68, v69);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            eax37 = (0);
+    //            goto addr_46126c_10;
+    //        }
+    //        addr_461269_40:
+    //        eax37 = v13;
+    //        addr_46126c_10:
+    //        return eax37;
+    //        addr_460fa1_26:
+    //        _terminate_multiple_matches(ecx53, 1);
+    //        edx70 = _usrnum;
+    //        ecx71 = (edx70) + reinterpret_cast < unsigned char> ((edx70)) * 4;
+    //        eax72 = g479100;
+    //        if ((eax72 + reinterpret_cast < unsigned char> (ecx71) * 4)) {
+    //            fun_478c28("Target type: %d, target: %d\r", v73, v9, v7);
+    //            edx74 = _usrnum;
+    //            v75 = (edx74);
+    //            _tell_user(ecx71, v75);
+    //        }
+    //        ecx76 = v77;
+    //        if (reinterpret_cast < unsigned char> (ecx76) > reinterpret_cast < unsigned char> (16)) 
+    //    goto addr_46101f_43;
+    //        *reinterpret_cast < signed char*> (&ecx76) = *reinterpret_cast < signed char*> (reinterpret_cast < unsigned char> (ecx76) + uint(fun_460ff2));
+    //        switch (ecx76)
+    //        {
+    //    addr_46101f_43:
+    //case 0:
+    //case 6:
+    //    if (*reinterpret_cast<uint16_t*>(ebx45 + 0x2f4) != 6)
+    //        {
+    //            if (*reinterpret_cast<uint16_t*>(ebx45 + 0x2f4) != 7)
+    //            {
+    //                edx78 = _usrnum;
+    //                v79 = (edx78);
+    //                al80 = _use_no_target(ecx76, ebx45, v79, edi11);
+    //                v63 = al80;
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                addr_461054_24:
+    //                *reinterpret_cast < unsigned char*> (esi12 + 0x6f4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x6f4) & 0xfbff);
+    //                eax81 = _margv;
+    //                v82 = (uint(eax81 + v83 * 4) + 4);
+    //                ecx84 = ((uint)(ebp4) + 0xfffffff0);
+    //                eax85 = _parse_command(ecx84, ecx84, v82);
+    //                if (!eax85 || v86 >= 10)
+    //                {
+    //                    v63 = 0;
+    //                    break;
+    //                }
+    //                else
+    //                {
+    //                    eax87 = _usrnum;
+    //                    v88 = (eax87);
+    //                    al90 = _use_no_target(ecx84, ebx45, v88, v89);
+    //                    v63 = al90;
+    //                    break;
+    //                }
+    //            }
+    //        }
+    //        else
+    //        {
+    //            *reinterpret_cast < unsigned char*> (esi12 + 0x6f4) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x6f4) & 0xfbff);
+    //            *reinterpret_cast < unsigned char*> (esi12 + 0x7c8) = reinterpret_cast < unsigned char> (*reinterpret_cast < unsigned char*> (esi12 + 0x7c8) & 0xfeff);
+    //            eax37 = _cmd_light(ecx76, esi12, edi11);
+    //            goto addr_46126c_10;
+    //        }
+    //case 1:
+    //    eax91 = _usrnum;
+    //        v92 = (eax91);
+    //        al93 = _use_spell_target(ecx76, ebx45, v92, eax58, edi11);
+    //        v63 = al93;
+    //        break;
+    //case 2:
+    //    ecx94 = _usrnum;
+    //        v95 = (ecx94);
+    //        al96 = _use_item_target(ecx94, ebx45, v95, eax58, edi11);
+    //        v63 = al96;
+    //        break;
+    //case 3:
+    //    edx97 = _usrnum;
+    //        v98 = (edx97);
+    //        al99 = _use_item_target(ecx76, ebx45, v98, eax58, edi11);
+    //        v63 = al99;
+    //        break;
+    //case 4:
+    //    eax100 = _usrnum;
+    //        v101 = (eax100);
+    //        al102 = _use_monster_target(ecx76, ebx45, v101, eax58, edi11);
+    //        v63 = al102;
+    //        break;
+    //case 5:
+    //    ecx103 = _usrnum;
+    //        v104 = (ecx103);
+    //        al105 = _use_player_target(ecx103, ebx45, v104, eax58, edi11);
+    //        v63 = al105;
+    //    }
+    //    addr_461138_30:
+    //eax106 = _get_item_data(v41);
+    //if (v63) {
+    //    *reinterpret_cast<unsigned char*>(esi12 + 0x6f4) = reinterpret_cast<unsigned char>(* reinterpret_cast<unsigned char*>(esi12 + 0x6f4) & 0xfbff);
+    //    *reinterpret_cast<unsigned char*>(esi12 + 0x7c8) = reinterpret_cast<unsigned char>(* reinterpret_cast<unsigned char*>(esi12 + 0x7c8) & 0xfeff);
+    //    edx107 = _usrnum;
+    //    v108 = (edx107);
+    //    _deduct_item_charge(v41, v108, eax106, (uint)(ebp4) + 0xfffffff8);
+    //    goto addr_461269_40;
+    //}
+    //addr_460f8f_27:
+    //_terminate_multiple_matches(ecx53, 0);
+    //eax37 = (1);
+    //goto addr_46126c_10;
+        
         }
 
         public void _cmd_whisper()
@@ -1422,26 +1820,26 @@ namespace ReMUD.Game
                 player.Level = 1;
                 player.NotExperience = 0;
                 player.CPRemaining = 100;
-                player.PrimaryStats.Intellect = 5;
-                player.PrimaryStats.WillPower = 5;
-                player.PrimaryStats.Strength = 5;
-                player.PrimaryStats.Health = 5;
-                player.PrimaryStats.Agility = 5;
-                player.PrimaryStats.Charm = 5;
-                player.PrimaryStats.MaxIntellect = 5;
-                player.PrimaryStats.MaxWillPower = 5;
-                player.PrimaryStats.MaxStrength = 5;
-                player.PrimaryStats.MaxHealth = 5;
-                player.PrimaryStats.MaxAgility = 5;
-                player.PrimaryStats.MaxCharm = 5;
+                player.Intellect = 5;
+                player.WillPower = 5;
+                player.Strength = 5;
+                player.Health = 5;
+                player.Agility = 5;
+                player.Charm = 5;
+                player.MaxIntellect = 5;
+                player.MaxWillPower = 5;
+                player.MaxStrength = 5;
+                player.MaxHealth = 5;
+                player.MaxAgility = 5;
+                player.MaxCharm = 5;
                 player.MaximumHitpoints = 10;
                 player.CurrentHitpoints = 10;
                 player.WeaponHand = 0;
-                player.Currency.Runic = 0;
-                player.Currency.Platinum = 0;
-                player.Currency.Gold = 0;
-                player.Currency.Silver = 0;
-                player.Currency.Copper = 0;
+                player.Runic = 0;
+                player.Platinum = 0;
+                player.Gold = 0;
+                player.Silver = 0;
+                player.Copper = 0;
                 player.MaximumEncumbrance = 0x1F4;
                 player.CurrentEncumbrance = 0;
                
@@ -1449,8 +1847,8 @@ namespace ReMUD.Game
                 player.Energy[1] = GameConstants.MAX_ENERGY_LEVEL;
                 player.Energy[2] = GameConstants.MAX_ENERGY_LEVEL;
 
-                player.unknown1[0] = 0x7D;
-                player.unknown1[1] = 0;
+                player.OffSet_xCC_xD7[0] = 0x7D;
+                player.OffSet_xCC_xD7[1] = 0;
                 player.MagicRes = 0;
                 player.MagicRes2 = 0;
                 player.MapNumber = 0x01;
@@ -1596,7 +1994,7 @@ namespace ReMUD.Game
                 //player.Offset_7C4[2] = 0;
                 //player.Offset_6EC[5] = -1;
                 //player.Offset_6DC[5] = 1;
-                player.bEDITED = 0;
+                player.EditFlag = 0;
                 //player.Offset_6FD = 0;
                 //player.Offset_6FE[0] = 0;
 
@@ -1640,7 +2038,7 @@ namespace ReMUD.Game
                 while (tmpIndex < 30);
 
 
-                player.CharLife = 0;
+                player.CharacterLife = 0;
 
                 //*reinterpret_cast<void***>(ebx14 + 0x724) = reinterpret_cast<void**>(0);
                 //*reinterpret_cast<void***>(ebx14 + 0x7c0) = reinterpret_cast<void**>(0);
@@ -1679,10 +2077,14 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _delay_done()
+        /// <summary>
+        /// _delay_done is used to check if there delays added to the used has elapsed.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
+        public bool _delay_done(PlayerType player)
         {
-
-            //TODO: Insert Logic.
+           return player.Delay == 0;
         }
 
         public void _delete_evil_points()
@@ -1697,10 +2099,37 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _delete_offline_mmud_user()
+        public void _delete_offline_mmud_user(PlayerType player)
         {
 
-            //TODO: Insert Logic.
+            //_delete_evil_points(player);
+            //_delete_users_bankbooks(player);
+
+            //int ebx10 = 0;
+            //do
+            //{
+            //    if (*reinterpret_cast<int32_t*>(uint(esi5 + ebx10 * 4) + 0xd8))
+            //    {
+            //        v11 = (uint(esi5 + ebx10 * 4) + 0xd8);
+            //        _remove_item_from_inventory(ecx7, 0xff, v11, (uint)(ebp3) + 0xfffffffc, esi5);
+            //    }
+            //    ++ebx10;
+            //} while (ebx10 < 100);
+
+            //do
+            //{
+            //    if (*reinterpret_cast<int32_t*>(uint(esi5 + ebx12 * 4) + 0x334))
+            //    {
+            //        v13 = (uint(esi5 + ebx12 * 4) + 0x334);
+            //        _remove_item_from_inventory(ecx7, 0xff, v13, (uint)(ebp3) + 0xfffffffc, esi5);
+            //    }
+            //    ++ebx12;
+            //}
+            //while (ebx12 < 50);
+
+            //eax15 = _get_gang_data(ecx14, ecx14);
+
+            ContentManager.Select<PlayerManager>().Delete(player);
         }
 
         public void _delete_permanent_info()
@@ -2141,10 +2570,48 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
+
         public void _edit_character_stats()
         {
 
-            //TODO: Insert Logic.
+            TcpListener listener = new TcpListener(new System.Net.IPEndPoint(IPAddress.Any, 23));
+
+            listener.Start(1);
+
+            TcpClient client = listener.AcceptTcpClient();
+
+
+            string fileContents = File.ReadAllText(@"C:\Projects\GIT\ReMUD\DATs\wcctext.msg", Encoding.GetEncoding(437));
+
+            List<string> characterCreationMenu = new List<string>();
+            List<TextMsgTypes> menus = new List<TextMsgTypes>();
+
+
+            int startIndex = 0;
+            int stopIndex = 0;
+            
+            for(int i = 0; i < fileContents.Length; i++)
+            {
+                
+                if(fileContents[i] == '{')
+                {
+                    startIndex = i;
+                }
+
+                if(fileContents[i] == '}')
+                {
+                    stopIndex = i;
+                    menus.Add(new TextMsgTypes(startIndex, stopIndex, fileContents));
+
+                    startIndex = 0;
+                    stopIndex = 0;
+
+                    client.Client.Send(AnsiUtility.GetBytes(menus[menus.Count -1].TextMsg));
+                    client.Client.Send(new byte[] { 0x0a, 0x0d});
+                }
+            }
+
+            
         }
 
         public void _edit_sysop_bulletin()
@@ -2165,10 +2632,38 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _energy_update_character()
+        public void _energy_update_character(PlayerType player)
         {
+            //void** esi3;
+            //void** ebx4;
+            //void** ebp5;
+            //void** eax6;
+            //void** ecx7;
+            //int32_t edx8;
+            //void** eax9;
 
-            //TODO: Insert Logic.
+            //eax6 = _get_player(ecx, a2, esi3, ebx4, ebp5);
+            //ecx7 = a2;
+            if (PlayerType.Validate(player) == true)
+            {
+                //(eax6 + 0x6f4) = ((eax6 + 0x6f4) & 0xffbf);
+
+                //if ((((eax6 + 0xba)) < ((eax6 + 0xb8)) ||
+                // (edx8 = ((eax6 + 0x6f4)), !(((&edx8) + 1) & 2))) &&
+                // ((ecx7 = (eax6 + 0xb8), (eax6 + 0xba) = (((eax6 + 0xba)) + (ecx7)), ((eax6 + 0xba)) > ((eax6 + 0xb8))) &&
+                // (eax9 = _is_inside_autocombat(a2, esi3, ebx4), ecx7 = a2, !(&eax9))))
+                //{
+                //    (eax6 + 0xba) = (eax6 + 0xb8);
+                //}
+
+                //if (player.EncumbrancePercent > 66)
+                //{
+                //    (eax6 + 0x7c4) = 0;
+                //}
+
+                //eax6 = _validate_auto_combat(ecx7, a2, esi3);
+            }
+            //return eax6;
         }
 
         public void _energy_update_monster()
@@ -2249,10 +2744,379 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _find_item_in_inventory()
+       
+        public ItemType _find_item_in_inventory(PlayerType player, string searchFor)
         {
+            ItemType itemType = new ItemType();
 
-            //TODO: Insert Logic.
+            int itemIndex = 0;
+
+            while (itemIndex < 100)
+            {
+                if (player.Item[itemIndex] != 0)
+                {
+
+                    itemType = _get_item_data(player.Item[itemIndex]);
+
+                    //                if (esi28)
+                    //                {
+                    //                    eax29 = _ljnsame(ecx23, a3, esi28 + 0xad);
+                    //                    if (eax29)
+                    //                    {
+                    //                        v30 = 1;
+                    //                        if (*reinterpret_cast < unsigned char*> ((uint)(&a8) + 1) & 1 && *reinterpret_cast<uint16_t*>(esi28 + 0x2f4) != 4) {
+                    //                            v30 = 0;
+                    //                        }
+                    //                        if (*reinterpret_cast < unsigned char*> ((uint)(&a8) + 1) & 2 && *reinterpret_cast<uint16_t*>(esi28 + 0x2f4) != 5) {
+                    //                            v30 = 0;
+                    //                        }
+                    //                        if (*reinterpret_cast < unsigned char*> ((uint)(&a8) + 1) & 4 && *reinterpret_cast<uint16_t*>(esi28 + 0x2f4) != 6) {
+                    //                            v30 = 0;
+                    //                        }
+
+                    //                        if (!(*reinterpret_cast < unsigned char*> (&a8) & 8)) {
+                    //                            if (*reinterpret_cast < unsigned char*> (&a8) & 64) {
+                    //                                eax31 = _usrnum;
+                    //                                ecx32 = g479100;
+                    //                                if ((ecx32 + uint((eax31) + reinterpret_cast < unsigned char > ((eax31)) * 4) * 4))
+                    //                                {
+                    //                                    fun_478c28("only worn, looking at: %s\r", esi28 + 0xad, v11, v9);
+                    //                                    edx33 = _usrnum;
+                    //                                    v34 = (edx33);
+                    //                                    _tell_user(ecx32, v34);
+                    //                                }
+                    //                                v30 = 0;
+                    //                                ecx23 = (0);
+                    //                                v35 = (0);
+
+                    //int wornIndex = 0;
+
+                    //do
+                    //{
+                    //    if (player.WornItem[wornIndex] != 0)
+                    //    {
+                    //        if ((edx36 + uint((ecx23) + reinterpret_cast < unsigned char > ((ecx23)) * 4) * 4))
+                    //        {
+                    //            ecx37 = esi28 + 0xad;
+                    //            fun_478c28("only worn, found %s at %d\r", ecx37, v35, v11);
+                    //            eax38 = _usrnum;
+                    //            v39 = (eax38);
+                    //            _tell_user(ecx37, v39);
+                    //            ecx23 = v39;
+                    //        }
+                    //        v30 = 1;
+                    //    }
+                    //    ++v35;
+                    //} while (char(v35) < char(20));
+
+                    //                                if (reinterpret_cast<int1_t>(static_cast<int32_t>(*reinterpret_cast < signed char *> (edi15 + 0x6ba)) == v25))
+                    //                                {
+                    //                                    ecx23 = _usrnum;
+                    //                                    edx40 = g479100;
+                    //                                    if ((edx40 + uint((ecx23) + reinterpret_cast < unsigned char > ((ecx23)) * 4) * 4))
+                    //                                    {
+                    //                                        ecx41 = esi28 + 0xad;
+                    //                                        fun_478c28("only worn, found %s as a light source\r", ecx41, v11, v9);
+                    //                                        eax42 = _usrnum;
+                    //                                        v43 = (eax42);
+                    //                                        _tell_user(ecx41, v43);
+                    //                                        ecx23 = v43;
+                    //                                    }
+                    //                                    v30 = 1;
+                    //                                }
+                    //                                if ((edi15 + 0x624) == (esi28))
+                    //                                {
+                    //                                    ecx23 = _usrnum;
+                    //                                    edx44 = g479100;
+                    //                                    if ((edx44 + uint((ecx23) + reinterpret_cast < unsigned char > ((ecx23)) * 4) * 4))
+                    //                                    {
+                    //                                        ecx45 = esi28 + 0xad;
+                    //                                        fun_478c28("only worn, found %s as a current weapon\r", ecx45, v11, v9);
+                    //                                        eax46 = _usrnum;
+                    //                                        v47 = (eax46);
+                    //                                        _tell_user(ecx45, v47);
+                    //                                        ecx23 = v47;
+                    //                                    }
+                    //                                    v30 = 1;
+                    //                                }
+                    //                            }
+                    //                        } else {
+                    //                            edx48 = _usrnum;
+                    //                            eax49 = g479100;
+                    //                            if ((eax49 + uint((edx48) + reinterpret_cast < unsigned char > ((edx48)) * 4) * 4))
+                    //                            {
+                    //                                fun_478c28("only unworn, looking at: %s\r", esi28 + 0xad, v11, v9);
+                    //                                ecx50 = _usrnum;
+                    //                                v51 = (ecx50);
+                    //                                _tell_user(ecx50, v51);
+                    //                            }
+                    //                            v52 = 0;
+                    //                            do
+                    //                            {
+                    //                                ecx23 = (uint(edi15 + v52 * 4) + 0x62c);
+                    //                                if (ecx23 == (esi28))
+                    //                                {
+                    //                                    v30 = 0;
+                    //                                }
+                    //                                ++v52;
+                    //                            } while (v52 < 20);
+                    //                            if (reinterpret_cast<int1_t>(static_cast<int32_t>(*reinterpret_cast < signed char *> (edi15 + 0x6ba)) == v25))
+                    //                            {
+                    //                                edx53 = _usrnum;
+                    //                                ecx23 = (edx53) + reinterpret_cast < unsigned char> ((edx53)) * 4;
+                    //                                eax54 = g479100;
+                    //                                if ((eax54 + reinterpret_cast < unsigned char> (ecx23) * 4)) {
+                    //                                    fun_478c28("only unworn, found %s as a light source\r", esi28 + 0xad, v11, v9);
+                    //                                    ecx55 = _usrnum;
+                    //                                    v56 = (ecx55);
+                    //                                    _tell_user(ecx55, v56);
+                    //                                    ecx23 = v56;
+                    //                                }
+                    //                                v30 = 0;
+                    //                            }
+                    //                            if ((edi15 + 0x624) == (esi28))
+                    //                            {
+                    //                                edx57 = _usrnum;
+                    //                                ecx23 = (edx57) + reinterpret_cast < unsigned char> ((edx57)) * 4;
+                    //                                eax58 = g479100;
+                    //                                if ((eax58 + reinterpret_cast < unsigned char> (ecx23) * 4)) {
+                    //                                    fun_478c28("only unworn, found %s as a current weapon\r", esi28 + 0xad, v11, v9);
+                    //                                    ecx59 = _usrnum;
+                    //                                    v60 = (ecx59);
+                    //                                    _tell_user(ecx59, v60);
+                    //                                    ecx23 = v60;
+                    //                                }
+                    //                                v30 = 0;
+                    //                            }
+                    //                        }
+                    //                        if (!v30)
+                    //                        {
+                    //                            ecx23 = _usrnum;
+                    //                            edx61 = g479100;
+                    //                            if ((edx61 + uint((ecx23) + reinterpret_cast < unsigned char > ((ecx23)) * 4) * 4))
+                    //                            {
+                    //                                if (!esi28)
+                    //                                {
+                    //                                    esi62 = ("unknown");
+                    //                                }
+                    //                                else
+                    //                                {
+                    //                                    esi62 = esi28 + 0xad;
+                    //                                }
+                    //                                fun_478c28("cannot use: %s\r", esi62, v11, v9);
+                    //                                eax63 = _usrnum;
+                    //                                v64 = (eax63);
+                    //                                _tell_user(ecx23, v64);
+                    //                                ecx23 = v64;
+                    //                            }
+                    //                        }
+                    //                        else
+                    //                        {
+                    //                            if (v20 != (esi28))
+                    //                            {
+                    //                                v18 = 1;
+                    //                                (a7) = (a7) + 1;
+                    //                                ecx65 = v22 + 1;
+                    //                                if ((a7) == ecx65)
+                    //                                {
+                    //                                    v20 = (esi28);
+                    //                                    (a6) = v25;
+                    //                                    ecx65 = a4;
+                    //                                    (ecx65) = (static_cast<int32_t>(*reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v25) * 2) + 0x268)));
+                    //                                }
+                    //                                v66 = esi28 + 0xad;
+                    //                                _add_multiple_option(ecx65, v66);
+                    //                                ecx23 = v66;
+                    //                                eax67 = fun_478bb6(ecx23, a3, esi28 + 0xad);
+                    //                                if (*reinterpret_cast<int16_t*>(&eax67))
+                    //                                {
+                    //                                    v20 = (esi28);
+                    //                                    (a6) = v25;
+                    //                                    ecx23 = v25;
+                    //                                    (a4) = (static_cast<int32_t>(*reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (ecx23) * 2) + 0x268)));
+                    //                                    v17 = 1;
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                    }
+                    //                }
+                    //                else
+                    //                {
+                    //                    v68 = (uint(edi15 + reinterpret_cast < unsigned char > (v25) * 4) + 0xd8);
+                    //                    eax69 = fun_478bf2(ecx23, "find_item: Item not found: %d", v68, a2, v11, v9);
+                    //                    _internal_error(ecx23, eax69, a2);
+                    //                    ecx23 = (0);
+                    //                    (uint(edi15 + reinterpret_cast < unsigned char > (v25) * 4) + 0xd8) = (0);
+                    //                }
+                    //            }
+                    //            ++v25;
+                    //        }
+                    //        if (!v18 && ((eax70 = fun_478ac6(ecx23), ecx23 = a3, ebx19 = eax70, !!ebx19) && ebx19 != a3))
+                    //        {
+                    //            (ebx19 + 0xffffffff) = (0);
+                    //            ++v16;
+                    //        }
+                    //    } while (!v18 && (ebx19 != a3 && v24 < 50));
+                    //    if (v17)
+                    //        goto addr_46a620_64;
+                    //    if ((a7) != v22 + 1)
+                    //        goto addr_46a64a_66;
+                    //    else
+                    //        goto addr_46a620_64;
+                    //}
+                    //addr_46a8ce_67:
+                    //return eax21;
+                    //addr_46a620_64:
+                    //ebx71 = a3;
+                    //(a5) = (1);
+                    //while ((ebx71))
+                    //{
+                    //    ++ebx71;
+                    //    edx72 = reinterpret_cast<void*>(0);
+                    //    (&edx72) = (ebx71);
+                    //    ecx73 = __ctype;
+                    //    if (!(*reinterpret_cast < unsigned char*> (reinterpret_cast < unsigned char> (ecx73) + uint(edx72) + 1) &1)) 
+                    //        continue;
+                    //    (a5) = (a5) + 1;
+                    //}
+                    //addr_46a64a_66:
+                    //ebx74 = a3;
+                    //v75 = v16;
+                    //if (v16)
+                    //{
+                    //    while (1)
+                    //    {
+                    //        if ((ebx74))
+                    //        {
+                    //            ++ebx74;
+                    //        }
+                    //        else
+                    //        {
+                    //            (ebx74) = (32);
+                    //            --v16;
+                    //            if (!v16)
+                    //                break;
+                    //        }
+                    //    }
+                    //}
+                    //v76 = 0;
+                    //if (!v17)
+                    //{
+                    //    if (*reinterpret_cast < unsigned char*> (edi15 + 0x330) > 50)
+                    //    {
+                    //        *reinterpret_cast < unsigned char*> (edi15 + 0x330) = 50;
+                    //    }
+                    //    v77 = 0;
+                    //    do
+                    //    {
+                    //        ++v77;
+                    //        ecx78 = (0);
+                    //        v79 = (0);
+                    //        while ((eax80 = (0), *reinterpret_cast < unsigned char*> (&eax80) = *reinterpret_cast < unsigned char*> (edi15 + 0x330), char(eax80) > char(v79)) && !v17) {
+                    //            if (*reinterpret_cast<int32_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v79) * 4) + 0x334))
+                    //            {
+                    //                v81 = (uint(edi15 + reinterpret_cast < unsigned char > (v79) * 4) + 0x334);
+                    //                eax82 = _get_item_data(v81, v81);
+                    //                ecx78 = v81;
+                    //                if (eax82)
+                    //                {
+                    //                    eax83 = _ljnsame(ecx78, a3, eax82 + 0xad);
+                    //                    if (eax83 && v20 != (eax82))
+                    //                    {
+                    //                        v76 = 1;
+                    //                        (a7) = (a7) + 1;
+                    //                        ecx84 = v22 + 1;
+                    //                        if ((a7) == ecx84)
+                    //                        {
+                    //                            v20 = (eax82);
+                    //                            ecx84 = (static_cast<int32_t>(*reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v79) * 2) + 0x3fc)));
+                    //                            (a4) = ecx84;
+                    //                        }
+                    //                        if (v16 < v75)
+                    //                        {
+                    //                            v75 = 0;
+                    //                            (a7) = v22 + 1;
+                    //                            v20 = (eax82);
+                    //                            (a4) = (static_cast<int32_t>(*reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v79) * 2) + 0x3fc)));
+                    //                            _terminate_multiple_matches(a4, 1);
+                    //                            ecx84 = (1);
+                    //                        }
+                    //                        v85 = eax82 + 0xad;
+                    //                        _add_multiple_option(ecx84, v85);
+                    //                        ecx78 = v85;
+                    //                        eax86 = fun_478bb6(ecx78, a3, eax82 + 0xad);
+                    //                        if (*reinterpret_cast<int16_t*>(&eax86))
+                    //                        {
+                    //                            v20 = (eax82);
+                    //                            ecx78 = a4;
+                    //                            (ecx78) = (static_cast<int32_t>(*reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v79) * 2) + 0x3fc)));
+                    //                            v17 = 1;
+                    //                        }
+                    //                    }
+                    //                }
+                    //                else
+                    //                {
+                    //                    *reinterpret_cast<int32_t*>(uint(edi15 + reinterpret_cast < unsigned char > (v79) * 4) + 0x334) = 0;
+                    //                    ecx78 = v79;
+                    //                    *reinterpret_cast<int16_t*>(uint(edi15 + reinterpret_cast < unsigned char > (ecx78) * 2) + 0x3fc) = -2;
+                    //                }
+                    //            }
+                    //            ++v79;
+                    //        }
+                    //        if (!v76)
+                    //        {
+                    //            if (v16 != v75)
+                    //            {
+                    //                eax87 = fun_478ac6(ecx78);
+                    //                ebx74 = eax87;
+                    //                if (ebx74 && ebx74 != a3)
+                    //                {
+                    //                    (ebx74 + 0xffffffff) = (0);
+                    //                    ++v16;
+                    //                }
+                    //            }
+                    //            else
+                    //            {
+                    //                v76 = 1;
+                    //            }
+                    //        }
+                    //    } while (!v76 && (ebx74 != a3 && v77 < 50));
+                    //    if (v17 || (a7) == v22 + 1)
+                    //    {
+                    //        ebx88 = a3;
+                    //        (a5) = (1);
+                    //        while ((ebx88))
+                    //        {
+                    //            ++ebx88;
+                    //            edx89 = reinterpret_cast<void*>(0);
+                    //            (&edx89) = (ebx88);
+                    //            ecx90 = __ctype;
+                    //            if (!(*reinterpret_cast < unsigned char*> (reinterpret_cast < unsigned char> (ecx90) + uint(edx89) + 1) &1)) 
+                    //                continue;
+                    //            (a5) = (a5) + 1;
+                    //        }
+                    //    }
+                    //    ebx91 = a3;
+                    //    if (v16)
+                    //    {
+                    //        while (1)
+                    //        {
+                    //            if ((ebx91))
+                    //            {
+                    //                ++ebx91;
+                    //            }
+                    //            else
+                    //            {
+                    //                (ebx91) = (32);
+                    //                --v16;
+                    //                if (!v16)
+                    //                    break;
+                    //            }
+                    //        }
+                }
+            }
+
+            return itemType;
         }
 
         public void _find_item_in_room()
@@ -2342,9 +3206,9 @@ namespace ReMUD.Game
             }
             else
             {
-                coinWeight = (player.Currency.Runic / 3 + player.Currency.Platinum / 3 +
-                              player.Currency.Gold / 3 + player.Currency.Silver / 3 +
-                              player.Currency.Copper / 3);
+                coinWeight = (player.Runic / 3 + player.Platinum / 3 +
+                              player.Gold / 3 + player.Silver / 3 +
+                              player.Copper / 3);
             }
 
             return coinWeight;
@@ -2744,8 +3608,8 @@ namespace ReMUD.Game
         {
             ulong totalCurrency = 0;
 
-            totalCurrency = _convert_currency(player.Currency.Runic, player.Currency.Platinum, player.Currency.Gold,
-                                              player.Currency.Silver, player.Currency.Copper);
+            totalCurrency = _convert_currency(player.Runic, player.Platinum, player.Gold,
+                                              player.Silver, player.Copper);
             
             return totalCurrency;
         }
@@ -2812,7 +3676,9 @@ namespace ReMUD.Game
 
         public void _init__wccmmud(string rootDirectory)
         {
-            ContentManager.Initialize(rootDirectory);           
+            ContentManager.Initialize(rootDirectory);
+
+       
         }
 
         public void _init_autocombat()
@@ -2875,10 +3741,21 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _is_inside_autocombat()
+        public bool _is_inside_autocombat(PlayerType player)
         {
 
-            //TODO: Insert Logic.
+            int playerIndexOffSet = 0;
+
+            //  do
+            // {
+            //   if (edx4 == playerIndexOffSet * 4 + 0x4969ec))
+            //       break;
+            //     ++eax5;
+            //
+            //  } while (eax5 < 0x226);
+
+            return true;
+
         }
 
         public void _is_user_forgotten()
@@ -3021,11 +3898,54 @@ namespace ReMUD.Game
 
             //TODO: Insert Logic.
         }
-
-        public void _ljnsame()
+        // //eax14 = _ljnsame(v13, a2, "Topics");
+        public void _ljnsame(object a2, string searchFor)
         {
+            //void** ebx4;
+            //void** esi5;
+            //void** eax6;
+            //void** eax7;
+            //void** edi8;
+            //void** eax9;
+            //void** eax10;
+            //void** eax11;
 
-            //TODO: Insert Logic.
+            //ebx4 = a3;
+            //esi5 = ebx4;
+
+            //if (!a2 || !ebx4)
+            //{
+            //    eax6 = reinterpret_cast<void**>(0);
+            //}
+            //else
+            //{
+            //    eax7 = fun_478b3e(ecx, a2, ebx4);
+            //    edi8 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(&eax7)));
+
+            //    while (true)
+            //    {
+            //        eax9 = fun_478be6(ecx);
+            //        ecx = ebx4;
+            //        esi5 = eax9;
+
+            //        if (!*reinterpret_cast<void***>(esi5))
+            //            continue;
+
+            //        eax10 = fun_478b08(ecx);
+            //        ecx = esi5;
+            //        ebx4 = eax10;
+            //        if (!*reinterpret_cast<void***>(ebx4))
+            //            continue;
+
+            //        eax11 = fun_478b3e(ecx, a2, ebx4);
+            //        edi8 = reinterpret_cast<void**>(static_cast<int32_t>(*reinterpret_cast<int16_t*>(&eax11)));
+            //    }
+
+            //    eax6 = edi8;
+            //}
+
+            //return eax6;
+
         }
 
         public void _ljnvfy()
@@ -3761,8 +4681,49 @@ namespace ReMUD.Game
 
         public void _save_next_buffer()
         {
+            if(_nextBuffer >= 10)
+            {
+                _nextBuffer = 0;
+            }
 
-            //TODO: Insert Logic.
+            switch(_nextBuffer)
+            {
+                case 0:
+                    _save_room_from_buffer();
+                    break;
+                case 1:
+                    _save_monster_from_buffer();
+                    break;
+                case 2:
+                    _save_known_monster_from_buffer();
+                    break;
+                case 3:
+                    _save_spell_from_buffer();
+                    break;
+                case 4:
+                    _save_class_from_buffer();
+                    break;
+                case 5:
+                    _save_race_from_buffer();
+                    break;
+                case 6:
+                    _save_shop_from_buffer();
+                    break;
+                case 7:
+                    _save_bankbook_from_buffer();
+                    break;
+                case 8:
+                    _save_message_from_buffer();
+                    break;
+                case 9:
+                    _save_gang_from_buffer();
+                    break;
+                case 10:
+                    _save_item_from_buffer();
+                    break;
+            }
+
+            _nextBuffer++;
         }
 
         public void _save_permanent_info()
@@ -3921,10 +4882,30 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _stop_dragging_user()
+        public void _stop_dragging_user(PlayerType player)
         {
 
-            //TODO: Insert Logic.
+            if (PlayerType.Validate(player) == true && (player.CurrentHitpoints <= 0))
+            {
+                int ebx12 = 0;
+
+                //while (eax13 = _nterms, ebx12 < (eax13))
+                //{
+                //    eax14 = fun_46b93c(ecx11, ebx12);
+                //    ecx11 = ebx12;
+                //    if ((&eax14) &&
+                //     ((eax15 = _get_player(ecx11, ebx12, v7, v5, v3), ecx11 = ebx12, (bool)eax15) &&
+                //      ((eax15 + 0x6f4) & 2 &&
+                //       (esi9 == ((eax15 + 0x6f8))))))
+                //    {
+                //        (eax15 + 0x6f4) = (eax15 + 0x6f4) & 0xfffd;
+                //        (eax15 + 0x6f8) = -1;
+                //    }
+
+                //    ++ebx12;
+                //}
+            }
+            //return;
         }
 
         public void _stop_emulation()
