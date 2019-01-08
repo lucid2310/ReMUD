@@ -6,6 +6,7 @@ namespace ReMUD.Game.Structures
 {
     public struct SpellType
     {
+        //<start>
         public short Number;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public char[] Name;
@@ -52,7 +53,7 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 6)]
         public char[] ShortName;
         public int Padding06;
-
+        //<stop>
         public string GetName()
         {
             return BtrieveUtility.ConvertToString(Name);

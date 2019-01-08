@@ -64,6 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Btrieve\BtrieveTypes.cs" />
+    <Compile Include="Content\GameStates.cs" />
+    <Compile Include="Content\MainMenuPage.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Managers\ActionManager.cs" />
     <Compile Include="Managers\BankManager.cs" />
@@ -83,7 +85,6 @@
     <Compile Include="Managers\ShopManager.cs" />
     <Compile Include="Managers\SpellManager.cs" />
     <Compile Include="Managers\TextBlockManager.cs" />
-    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\ActionType.cs" />
     <Compile Include="Structures\BankType.cs" />
@@ -92,7 +93,6 @@
     <Compile Include="Structures\GameConstants.cs" />
     <Compile Include="Structures\GangType.cs" />
     <Compile Include="Structures\ItemType.cs" />
-    <Compile Include="Content\PlayerEntity.cs" />
     <Compile Include="Structures\MessageType.cs" />
     <Compile Include="Structures\NonPlayerCharacterType.cs" />
     <Compile Include="Structures\PlayerType.cs" />
@@ -102,22 +102,26 @@
     <Compile Include="Structures\SpellType.cs" />
     <Compile Include="Structures\SupportTypes\AbilityTypes.cs" />
     <Compile Include="Structures\SupportTypes\CurrencyType.cs" />
+    <Compile Include="Structures\SupportTypes\DynamicStats.cs" />
     <Compile Include="Structures\SupportTypes\InventoryItemType.cs" />
     <Compile Include="Structures\SupportTypes\InventoryType.cs" />
     <Compile Include="Structures\SupportTypes\PlayerStatType.cs" />
     <Compile Include="Structures\SupportTypes\StatType.cs" />
     <Compile Include="Structures\SupportTypes\TextMsgTypes.cs" />
     <Compile Include="Structures\TextBlockType.cs" />
-    <Compile Include="Structures\UserType.cs" />
-    <Compile Include="Structures\Utilities\AnsiUtility.cs" />
     <Compile Include="Structures\Utilities\BtrieveUtility.cs" />
+    <Compile Include="Structures\Utilities\PrintFormatUtility.cs" />
     <Compile Include="Structures\Utilities\TextUtility.cs" />
+    <Compile Include="Tests\MessageTestProcedures.cs" />
     <Compile Include="Tests\PlayerTestProcedures.cs" />
+    <Compile Include="Utilities\CustomFileUtility.cs" />
+    <Compile Include="Utilities\WordWrapHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="WBTRV32.DLL">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

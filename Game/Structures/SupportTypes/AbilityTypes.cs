@@ -15,5 +15,8 @@ namespace ReMUD.Game.Structures.SupportTypes
         public const int JumpKick = 35;
         public const int CriticalHit = 58;
         public const int Illuminate = 13;
+        public const int FindTrapsValue = 179;
+        public const int Confusion = 71;
+        public const int ConfusionMessage = 101;
     }
 }

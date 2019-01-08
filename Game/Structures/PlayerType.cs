@@ -96,7 +96,7 @@ namespace ReMUD.Game.Structures
         public short CurrentMana;
         public short SpellCasting;
         public short Traps;
-        public short unknown6;
+        public short BaseTraps;
         public short Picklocks;
         public short Tracking;
         public short nothing9;

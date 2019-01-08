@@ -54,7 +54,9 @@ namespace ReMUD.Game.Managers
                 }
                 else
                 {
-                    LogManager.Log("Error: {0}", Status);
+                    LogManager.Log("Error: {0}", BtrieveTypes.BtrieveErrorCode(Status));
+
+                    return Status;
                 }
 
                 while (Status != BtrieveTypes.BtrieveStatus.END_OF_FILE)
@@ -75,6 +77,8 @@ namespace ReMUD.Game.Managers
                     else
                     {
                         LogManager.Log("Error: {0}", Status);
+
+                        return Status;
                     }
                 }
             }

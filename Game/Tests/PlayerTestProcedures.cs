@@ -10,6 +10,13 @@ namespace ReMUD.Game.Tests
 {
     public static class PlayerTestProcedures
     {
+        private static GameManager _gameManager = new GameManager();
+
+        public static void InitializeGameManager(string directory)
+        {
+            _gameManager._init__wccmmud(directory);
+        }
+
         public static void ConvertCurrency_TC01()
         {
             // all currency normalized to copper.
@@ -176,6 +183,47 @@ namespace ReMUD.Game.Tests
             actualValue = gameManager._get_coin_weight(player);
 
             Console.WriteLine("Test {0} Status = {1}", MethodBase.GetCurrentMethod().Name, actualValue.ToString().Equals(expectedValue.ToString()) == true ? "Pass" : "Fail");
+        }
+
+        public static void AddDelay_TP01()
+        {
+            PlayerType player = PlayerType.Initialize();
+
+            _gameManager._add_delay(ref player, 5);
+
+            AssertResults("Verify player.Delay is set to 5.", player.Delay, 5, "");
+        }
+        public static void GetLegalLevel_TP01()
+        {
+            PlayerType player = PlayerType.Initialize();
+            Dictionary<int, int> legalLevels = new Dictionary<int, int>();
+
+            legalLevels.Add(-201, 7);
+            legalLevels.Add(-51, 0);
+            legalLevels.Add(30, 0);
+            legalLevels.Add(40, 0);
+            legalLevels.Add(80, 0);
+            legalLevels.Add(120, 0);
+            legalLevels.Add(210, 0);
+
+            foreach (var ep in legalLevels)
+            {
+                int legalLevel = _gameManager._get_legal_level(ep.Key);
+            }
+        }
+
+        public static void AssertResults(string testDescription, object valueA, object valueB, string message)
+        {
+            string objValueA = valueA.ToString();
+            string objValueB = valueB.ToString();
+
+            if(objValueA.Equals(objValueB) == true)
+            {
+                Console.WriteLine(testDescription);
+                Console.WriteLine("Actual: {0}", valueA);
+                Console.WriteLine("Expected: {0}", valueB);
+                Console.WriteLine(message);
+            }
         }
     }
 }

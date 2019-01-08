@@ -8,7 +8,6 @@ namespace ReMUD.Game.Managers
 {
     public class MetaContentManager
     {
-        public UserManager UserContentManager = new UserManager();
         private Dictionary<Type, IManager> _contentManagers = new Dictionary<Type, IManager>();
 
         public MetaContentManager()
@@ -18,17 +17,15 @@ namespace ReMUD.Game.Managers
          //   _contentManagers.Add(typeof(BankManager), new BankManager());
             _contentManagers.Add(typeof(ClassManager), new ClassManager());
          //   _contentManagers.Add(typeof(GangManager), new GangManager());
-            _contentManagers.Add(typeof(ItemManager), new ItemManager());
-          //  _contentManagers.Add(typeof(MessageManager), new MessageManager());
-            _contentManagers.Add(typeof(NPCManager), new NPCManager());
-            _contentManagers.Add(typeof(PlayerManager), new PlayerManager());
+            //_contentManagers.Add(typeof(ItemManager), new ItemManager());
+            _contentManagers.Add(typeof(MessageManager), new MessageManager());
+            //_contentManagers.Add(typeof(NPCManager), new NPCManager());
+           // _contentManagers.Add(typeof(PlayerManager), new PlayerManager());
             _contentManagers.Add(typeof(RaceManager), new RaceManager());
           //  _contentManagers.Add(typeof(RoomManager), new RoomManager());
           //  _contentManagers.Add(typeof(ShopManager), new ShopManager());
-           // _contentManagers.Add(typeof(SpellManager), new SpellManager());
+            _contentManagers.Add(typeof(SpellManager), new SpellManager());
            // _contentManagers.Add(typeof(TextBlockManager), new TextBlockManager());
-
-            UserContentManager.LoadUsers();
         }
 
         public T Select<T>()
