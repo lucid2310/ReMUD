@@ -232,10 +232,162 @@ namespace ReMUD.Game
             //}
         }
 
-        public void _add_cast_spell_to_user()
+        public void _add_cast_spell_to_user(PlayerType player, int a7, int a6, SpellType spell)
         {
+            //void** ecx, void** a2, void** a3, void** a4, void** a5, void** a6, void** a7, void** a8, signed char a9)
 
-            //TODO: Insert Logic.
+            //v10 = ebx11;
+            //v12 = esi13;
+            //v14 = edi15;
+            //edi16 = a6;
+            //eax17 = _get_player(ecx, a2, v14, v12, v10);
+            //esi18 = eax17;
+
+            if (PlayerType.Validate(player) == false)
+            {
+                if (a7 >= 0)
+                {
+                    string outputMessage = string.Empty;
+
+                    if (SpellType.Validate(spell) == true)
+                    {
+                        outputMessage = sprintf("You attempt to cast %s, but fail.\r", spell.GetName());
+                        _prf_prompt(player);
+                        _tell_user(outputMessage, player, player);
+                    }
+                    else
+                    {
+                        _internal_error("_add_cast_spell_to_user: Invalid Spell");
+                    }
+                }
+            }
+            else
+            {
+                if (spell.LevelCap > 0)
+                {
+                    if (player.Level > spell.LevelCap)
+                    {
+                        if (spell.LVLSDurIncr != 0)
+                        {
+                            Int64 v16 = spell.DurIncrease * 0x100000000 * (0x100000000 * (spell.LevelCap >> 31) | spell.LevelCap) / spell.LVLSDurIncr / 0x100000000;
+                        }
+                    }
+                }
+
+
+
+
+            }
+
+            //if (!esi18 || !edi16)
+            //{
+            //    addr_43ed14_2:
+            //    zf19 = g485964 == 0;
+            //    if (zf19 && reinterpret_cast < signed char> (a7) >= reinterpret_cast < signed char> (0)) {
+            //        fun_478c28(0x4859cc, v14, v12, v10, 0x4859cc, v14, v12, v10);
+            //        if (!edi16)
+            //        {
+            //            edi20 = reinterpret_cast<void**>(0x48598a);
+            //        }
+            //        else
+            //        {
+            //            edi20 = edi16 + 2;
+            //        }
+            //        fun_478c28("You attempt to cast %s, but fail.\r", edi20, v14, v12, "You attempt to cast %s, but fail.\r", edi20, v14, v12);
+            //        _prf_prompt(0x4859cc, a7);
+            //        _tell_user(a7, a7, a7);
+            //    }
+            //}
+            //else
+            //{
+            //    if (a8)
+            //    {
+            //        if (reinterpret_cast < signed char> (*reinterpret_cast<void***>(edi16 + 0xa2)) <= reinterpret_cast < signed char> (0) ||
+            //              reinterpret_cast<int32_t>(static_cast<uint32_t>(reinterpret_cast<uint16_t>(*reinterpret_cast<void***>(a8 + 0x94)))) <= static_cast<int32_t>(reinterpret_cast<int16_t>(*reinterpret_cast<void***>(edi16 + 0xa2)))) {
+            //            ecx21 = reinterpret_cast<void**>(static_cast<uint32_t>(reinterpret_cast<uint16_t>(*reinterpret_cast<void***>(a8 + 0x94))));
+            //        } else {
+            //            ecx21 = reinterpret_cast<void**>(static_cast<int32_t>(reinterpret_cast<int16_t>(*reinterpret_cast<void***>(edi16 + 0xa2))));
+            //        }
+            //        if ((edi16 + 0xf9))
+            //        {
+            //            eax22 = 0;
+            //            (&eax22) = (edi16 + 0xf9);
+            //            __asm__("cdq ");
+            //            edx23 = 0;
+            //            *reinterpret_cast<void***>(&edx23) = *reinterpret_cast<void***>(edi16 + 0xf8);
+            //            a4 = reinterpret_cast<void**>(reinterpret_cast < unsigned char > (a4) + reinterpret_cast < signed char > (ecx21) / eax22 * edx23);
+            //        }
+            //        eax24 = reinterpret_cast<void**>(*reinterpret_cast<int16_t*>(edi16 + 0xca) * reinterpret_cast < unsigned char > (ecx21));
+            //        if (reinterpret_cast < signed char> (eax24) > reinterpret_cast < signed char> (a4)) {
+            //            eax25 = fun_478cb2(a4, eax24 + 1, v14);
+            //            a4 = eax25;
+            //        }
+            //        eax26 = _get_user_ability_value(ecx21, 0xa6, 0xff, a8, 0, 0);
+            //        __asm__("cdq ");
+            //        a4 = reinterpret_cast<void**>(reinterpret_cast<int32_t>(reinterpret_cast<uint32_t>(eax26 + 100) * reinterpret_cast < unsigned char > (a4)) / 100);
+            //    }
+            //    ebx27 = reinterpret_cast<void**>(0);
+            //    do
+            //    {
+            //        if (reinterpret_cast<int1_t>(static_cast<uint32_t>(*reinterpret_cast<uint16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx27) * 2) + 64)) == a3))
+            //            goto addr_43ec31_18;
+            //        ++ebx27;
+            //    } while (reinterpret_cast < signed char> (ebx27) < reinterpret_cast < signed char> (10));
+            //    goto addr_43ecc3_20;
+            //}
+            //eax28 = reinterpret_cast<void**>(0xffffffff);
+            //addr_43ed5f_22:
+            //return eax28;
+            //addr_43ec31_18:
+            //if (!a9)
+            //{
+            //    zf29 = g485964 == 0;
+            //    if (zf29 && reinterpret_cast < signed char> (a7) >= reinterpret_cast < signed char> (0)) {
+            //        fun_478c28(0x4859cc, v14, v12, v10, 0x4859cc, v14, v12, v10);
+            //        fun_478c28("You attempt to cast %s, but fail.\r", edi16 + 2, v14, v12, "You attempt to cast %s, but fail.\r", edi16 + 2, v14, v12);
+            //        _prf_prompt(0x4859cc, a7);
+            //        _tell_user(a7, a7, a7);
+            //    }
+            //    eax28 = reinterpret_cast<void**>(0xfffffffe);
+            //    goto addr_43ed5f_22;
+            //}
+            //else
+            //{
+
+            //    *reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx27) * 2) + 84) = *reinterpret_cast<int16_t*>(&a5);
+            //    *reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx27) * 2) + 0x68) = *reinterpret_cast<int16_t*>(&a4);
+
+            //    if (!(esi18 + 0x5f6))
+            //    {
+            //        _display_spell_success(a7, a2, edi16, a8, esi18 + 30, a5);
+            //    }
+
+            //    eax28 = ebx27;
+            //    goto addr_43ed5f_22;
+            //}
+
+            //addr_43ecc3_20:
+
+            //ebx30 = reinterpret_cast<void**>(0);
+            //do
+            //{
+            //    if (!*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx30) * 2) + 64))
+            //        break;
+            //    ++ebx30;
+            //}
+            //while (reinterpret_cast < signed char> (ebx30) < reinterpret_cast < signed char> (10));
+
+            //goto addr_43ed14_2;
+            //*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx30) * 2) + 64) = *reinterpret_cast<int16_t*>(&a3);
+            //*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx30) * 2) + 0x68) = *reinterpret_cast<int16_t*>(&a4);
+            //*reinterpret_cast<int16_t*>(reinterpret_cast<uint32_t>(esi18 + reinterpret_cast < unsigned char > (ebx30) * 2) + 84) = *reinterpret_cast<int16_t*>(&a5);
+            //if (!(esi18 + 0x5f6))
+            //{
+            //    _display_spell_success(a7, a2, edi16, a8, esi18 + 30, a5);
+            //}
+            //eax28 = ebx30;
+            //goto addr_43ed5f_22;
+            ////TODO: Insert Logic.
         }
 
         public void _add_delay(ref PlayerType player, byte delay)
@@ -460,7 +612,47 @@ namespace ReMUD.Game
         public void _already_evil()
         {
 
-            //TODO: Insert Logic.
+            void** ecx6;
+            void** edx7;
+            void** eax8;
+
+            ecx6 = a3;
+            edx7 = a2;
+            eax8 = g488180;
+
+            if (!eax8)
+            {
+                return 0;
+            }
+            if (!eax8)
+            {
+                addr_44e89b_4:
+                return 0;
+            }
+            else
+            {
+                do
+                {
+                    if (ecx6 != *reinterpret_cast<void***>(eax8 + 4))
+                        continue;
+                    if (edx7 == *reinterpret_cast<void***>(eax8))
+                        break;
+                    eax8 = *reinterpret_cast<void***>(eax8 + 20);
+                } while (eax8);
+                goto addr_44e89b_4;
+            }
+            if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 1)) {
+                (&eax8) = 1;
+                return eax8;
+            } else {
+                if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 2)) {
+                    (&eax8) = 2;
+                    return eax8;
+                } else {
+                    (&eax8) = 3;
+                    return eax8;
+                }
+            }
         }
 
         public void _ask_monster_a_question()
@@ -796,7 +988,7 @@ namespace ReMUD.Game
         {
             return PrintFormatUtility.sprintf(message, arguments);
 
-           // return string.Format(message, arguments);
+            // return string.Format(message, arguments);
         }
 
         public void _can_sneak()
@@ -864,7 +1056,7 @@ namespace ReMUD.Game
 
         public bool _check_confusion(PlayerType player)
         {
-            if(PlayerType.Validate(player) == false ||
+            if (PlayerType.Validate(player) == false ||
               (player.OffSet_x6EC_x6FB[8] & 0x80) == 0)
             {
                 return false;
@@ -2048,8 +2240,9 @@ namespace ReMUD.Game
         {
             PlayerType player = ContentManager.Select<PlayerManager>().Select(username);
 
-            if (player.GetUsername().Length == 0)
+            if (PlayerType.Validate(player) == false)
             {
+                player = PlayerType.Initialize();
                 player.SetUserName(username);
                 player.SetFirstName(username);
 
@@ -2091,6 +2284,7 @@ namespace ReMUD.Game
                 player.MagicRes2 = 0;
                 player.MapNumber = 0x01;
                 player.RoomNumber = 0x85C;
+
                 // player.Nothing2 = 0;
 
                 // player.Offset_6B8[2] = 0;
@@ -3898,10 +4092,32 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _get_spell_random_modifier()
+        public int _get_spell_random_modifier(PlayerType player, SpellType spell)
         {
-
-            //TODO: Insert Logic.
+            if ((spell.SpellAttackType) < 3)
+            {
+                switch (spell.TypeOfAttack)
+                {               
+                    default:
+                        return 0;
+                    case 0:
+                        return _get_user_ability_value(player, AbilityTypes.ResistCold);
+                    case 1:
+                       return _get_user_ability_value(player, AbilityTypes.ResistFire);                     
+                    case 2:
+                        return _get_user_ability_value(player, AbilityTypes.ResistStone);
+                    case 3:
+                        return _get_user_ability_value(player, AbilityTypes.ResistLightning);
+                    case 5:
+                        return _get_user_ability_value(player, AbilityTypes.ResistWater);
+                    case 6:
+                        return _get_user_ability_value(player, AbilityTypes.ResistPoison);
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public void _get_text_block()
@@ -4028,7 +4244,7 @@ namespace ReMUD.Game
 
                     for (int s = 0; s < spellType.AbilityId.Length; s++)
                     {
-                        if(spellType.AbilityId[s] == linkedMessage)
+                        if (spellType.AbilityId[s] == linkedMessage)
                         {
                             messageId = spellType.AbilityValue[s];
                         }
@@ -4925,10 +5141,9 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _prf_prompt()
+        public void _prf_prompt(PlayerType player)
         {
 
-            //TODO: Insert Logic.
         }
 
         public void _prf_wait_cycle()
@@ -5334,8 +5549,38 @@ namespace ReMUD.Game
 
         public void _should_give_evil()
         {
+            int esi4;
+            int ebx5;
+            int eax6;
+            int eax7;
 
-            //TODO: Insert Logic.
+            eax6 = _already_evil(ecx, a3, a2, esi4, ebx5);
+
+            if (!(&eax6))
+            {
+                eax7 = _already_evil(ecx, a2, a3, esi4, ebx5);
+
+                if (!(&eax7))
+                {
+                    (&eax7) = 2;
+                }
+                else
+                {
+                    if ((&eax7) == 1)
+                    {
+                        eax7 = reinterpret_cast<void**>(0);
+                    }
+                    else
+                    {
+                        (&eax7) = 1;
+                    }
+                }
+            }
+            else
+            {
+                eax7 = 0;
+            }
+           // return eax7;
         }
 
         public void _show_current_emulations()

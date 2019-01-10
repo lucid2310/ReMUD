@@ -192,7 +192,27 @@ namespace ReMUD.Game.Structures
 
         public static bool Validate(PlayerType player)
         {
-            return player.Username != null;
+            if(player.Username == null)
+            {
+                return false;
+            }
+
+            if (player.Username[0] == 0)
+            {
+                return false;
+            }
+
+            if(player.FirstName == null)
+            {
+                return false;
+            }
+
+            if(player.FirstName[0] == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

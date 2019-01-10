@@ -20,7 +20,7 @@ namespace ReMUD.Game.Managers
             //_contentManagers.Add(typeof(ItemManager), new ItemManager());
             _contentManagers.Add(typeof(MessageManager), new MessageManager());
             //_contentManagers.Add(typeof(NPCManager), new NPCManager());
-           // _contentManagers.Add(typeof(PlayerManager), new PlayerManager());
+            _contentManagers.Add(typeof(PlayerManager), new PlayerManager());
             _contentManagers.Add(typeof(RaceManager), new RaceManager());
           //  _contentManagers.Add(typeof(RoomManager), new RoomManager());
           //  _contentManagers.Add(typeof(ShopManager), new ShopManager());
@@ -30,6 +30,11 @@ namespace ReMUD.Game.Managers
 
         public T Select<T>()
         {
+            if(_contentManagers.ContainsKey(typeof(T)) == false)
+            {
+                return default(T);
+            }
+
             return (T)_contentManagers[typeof(T)];
         }
 

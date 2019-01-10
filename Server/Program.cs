@@ -79,27 +79,41 @@ namespace ReMUD.Server
             //PlayerTestProcedures.GetCoinWeight_TC01();
             //PlayerTestProcedures.CheckPlayerStruction_TC01();
 
+
             GameManager gameManager = new GameManager();
+           
             gameManager._init__wccmmud(rootDirectory);
-            PlayerType newPlayer = PlayerType.Initialize();
 
-            newPlayer.Class = 1;
-            newPlayer.Race = 1;
-            newPlayer.SpellCasted[0] = 131;
-            newPlayer.SpellRoundsLeft[0] = 5;
-            newPlayer.SpellValue[0] = 1;
-            newPlayer.SetFirstName("maxx");
+            PlayerType player = gameManager._create_player("maxx");
 
-            gameManager._check_confusion(newPlayer);
+            player.Race = 1;
+            player.Class = 1;
+            player.Level = 25;
+            SpellType spell = gameManager._get_spell_data(9).Value;
+
+            //gameManager._add_cast_spell_to_user(player, 0, 0, spell);
+
+            int spellMod = gameManager._get_spell_random_modifier(player, spell);
+
+            //PlayerType newPlayer = PlayerType.Initialize();
+
+            //newPlayer.Class = 1;
+            //newPlayer.Race = 1;
+            //newPlayer.SpellCasted[0] = 131;
+            //newPlayer.SpellRoundsLeft[0] = 5;
+            //newPlayer.SpellValue[0] = 1;
+            //newPlayer.SetFirstName("maxx");
+
+            //gameManager._check_confusion(newPlayer);
 
 
-            // gameManager._edit_character_stats();
+            //// gameManager._edit_character_stats();
             #endregion
 
-            InitializeServer(23, "Test", rootDirectory);
+            //InitializeServer(23, "Test", rootDirectory);
 
-            //CustomFileUtility.GetDisplay(110, 127);
-            //DatabaseManager.CalculateMD5Hash("pass123");
+            ////CustomFileUtility.GetDisplay(110, 127);
+            ////DatabaseManager.CalculateMD5Hash("pass123");
             Console.Read();
         }
 

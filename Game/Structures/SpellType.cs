@@ -54,6 +54,7 @@ namespace ReMUD.Game.Structures
         public char[] ShortName;
         public int Padding06;
         //<stop>
+
         public string GetName()
         {
             return BtrieveUtility.ConvertToString(Name);
@@ -77,6 +78,28 @@ namespace ReMUD.Game.Structures
         public byte[] Serialized()
         {
             return BtrieveUtility.Serialize<SpellType>(this);
+        }
+
+        public static bool Validate(SpellType spell)
+        {
+            if(spell.Number == 0)
+            {
+                return false;
+            }
+
+            if (spell.Name == null)
+            {
+                return false;
+            }
+
+            if (spell.Name[0] == 0)
+            {
+                return false;
+            }
+
+            
+
+            return true;
         }
     }
 }
