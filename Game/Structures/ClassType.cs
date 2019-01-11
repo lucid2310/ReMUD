@@ -9,6 +9,7 @@ namespace ReMUD.Game.Structures
 {
     public struct ClassType
     {
+        //<start>
         public short Number;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 30)]
         public char[] Name;
@@ -31,5 +32,6 @@ namespace ReMUD.Game.Structures
         public int TitleText;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 26)]
         public short[] PaddingThree;
+        //<stop>
     }
 }

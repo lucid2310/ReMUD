@@ -81,19 +81,22 @@ namespace ReMUD.Server
 
 
             GameManager gameManager = new GameManager();
-           
-            gameManager._init__wccmmud(rootDirectory);
 
-            PlayerType player = gameManager._create_player("maxx");
 
-            player.Race = 1;
-            player.Class = 1;
-            player.Level = 25;
-            SpellType spell = gameManager._get_spell_data(9).Value;
+            int results = gameManager._stat_amount_used(35, 95);
 
-            //gameManager._add_cast_spell_to_user(player, 0, 0, spell);
+          //  gameManager._init__wccmmud(rootDirectory);
 
-            int spellMod = gameManager._get_spell_random_modifier(player, spell);
+            //PlayerType player = gameManager._create_player("maxx");
+
+            //player.Race = 1;
+            //player.Class = 1;
+            //player.Level = 25;
+            //SpellType spell = gameManager._get_spell_data(9).Value;
+
+            ////gameManager._add_cast_spell_to_user(player, 0, 0, spell);
+
+            //int spellMod = gameManager._get_spell_random_modifier(player, spell);
 
             //PlayerType newPlayer = PlayerType.Initialize();
 

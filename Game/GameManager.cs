@@ -612,47 +612,47 @@ namespace ReMUD.Game
         public void _already_evil()
         {
 
-            void** ecx6;
-            void** edx7;
-            void** eax8;
+            //void** ecx6;
+            //void** edx7;
+            //void** eax8;
 
-            ecx6 = a3;
-            edx7 = a2;
-            eax8 = g488180;
+            //ecx6 = a3;
+            //edx7 = a2;
+            //eax8 = g488180;
 
-            if (!eax8)
-            {
-                return 0;
-            }
-            if (!eax8)
-            {
-                addr_44e89b_4:
-                return 0;
-            }
-            else
-            {
-                do
-                {
-                    if (ecx6 != *reinterpret_cast<void***>(eax8 + 4))
-                        continue;
-                    if (edx7 == *reinterpret_cast<void***>(eax8))
-                        break;
-                    eax8 = *reinterpret_cast<void***>(eax8 + 20);
-                } while (eax8);
-                goto addr_44e89b_4;
-            }
-            if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 1)) {
-                (&eax8) = 1;
-                return eax8;
-            } else {
-                if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 2)) {
-                    (&eax8) = 2;
-                    return eax8;
-                } else {
-                    (&eax8) = 3;
-                    return eax8;
-                }
-            }
+            //if (!eax8)
+            //{
+            //    return 0;
+            //}
+            //if (!eax8)
+            //{
+            //    addr_44e89b_4:
+            //    return 0;
+            //}
+            //else
+            //{
+            //    do
+            //    {
+            //        if (ecx6 != *reinterpret_cast<void***>(eax8 + 4))
+            //            continue;
+            //        if (edx7 == *reinterpret_cast<void***>(eax8))
+            //            break;
+            //        eax8 = *reinterpret_cast<void***>(eax8 + 20);
+            //    } while (eax8);
+            //    goto addr_44e89b_4;
+            //}
+            //if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 1)) {
+            //    (&eax8) = 1;
+            //    return eax8;
+            //} else {
+            //    if (!(reinterpret_cast < unsigned char> (*reinterpret_cast<void***>(eax8 + 16)) & 2)) {
+            //        (&eax8) = 2;
+            //        return eax8;
+            //    } else {
+            //        (&eax8) = 3;
+            //        return eax8;
+            //    }
+            //}
         }
 
         public void _ask_monster_a_question()
@@ -4907,10 +4907,76 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _monster_add_cast_spell_to_user()
+        public int _monster_add_cast_spell_to_user(PlayerType player, short _a8, short _a12, int _a16, int _a20, int _a24, byte _a28)
         {
 
-            //TODO: Insert Logic.
+            int __ebx;                      // r1
+            int __edi;                        // r4
+            object __esi;                       // r5
+            PlayerType _t39;                       // _t39
+            int _t48;                        // _t48
+            int _t54 = 0;                       // _t54
+            int _t55;                       // _t55
+
+            __edi = _a16;
+            _t39 = player;
+
+            if (PlayerType.Validate(player) == false || _a20 == 0)
+            {
+                return -1;
+            }
+            else
+            {
+                _t55 = _t54 | 255;
+                __ebx = 0;
+                while ((player.SpellCasted[__ebx] & 65535) != _a8)
+                {
+                    if (player.SpellCasted[__ebx] == 0)
+                    {
+                        _t55 = __ebx;
+                    }
+
+                    __ebx = __ebx + 1;
+
+                    if (__ebx < 10)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        if (_t55 == 255)
+                        {
+                            return 0;// _t39 | 255;
+                        }
+
+                        // 64
+                        player.SpellCasted[_t55] = _a8;
+                        // 104
+                        player.SpellRoundsLeft[_t55] = _a12;
+                        // 84
+                        //player.SpellValue[_t55] = __edi;
+
+                        //_monster_display_spell_success(_a4, _a20, _a24, _t39 + 30, __edi);
+
+                        return _t55;
+                    }
+                }
+
+                if (_a28 == 0 || __edi <= player.SpellValue[__ebx])
+                {
+                    return -2;
+                }
+                else
+                {
+                    // 84 offset.
+                    //player.SpellValue[__ebx] = __di;
+                    // 104 offset.
+                    player.SpellRoundsLeft[__ebx] = _a12;
+
+                    //_monster_display_spell_success(_a4, _a20, _a24, _t39 + 30, __edi);
+                    return __ebx;
+                }
+            }
         }
 
         public void _monster_add_duration_spell_to_room()
@@ -5549,38 +5615,38 @@ namespace ReMUD.Game
 
         public void _should_give_evil()
         {
-            int esi4;
-            int ebx5;
-            int eax6;
-            int eax7;
+           // int esi4;
+           // int ebx5;
+           // int eax6;
+           // int eax7;
 
-            eax6 = _already_evil(ecx, a3, a2, esi4, ebx5);
+           // eax6 = _already_evil(ecx, a3, a2, esi4, ebx5);
 
-            if (!(&eax6))
-            {
-                eax7 = _already_evil(ecx, a2, a3, esi4, ebx5);
+           // if (!(&eax6))
+           // {
+           //     eax7 = _already_evil(ecx, a2, a3, esi4, ebx5);
 
-                if (!(&eax7))
-                {
-                    (&eax7) = 2;
-                }
-                else
-                {
-                    if ((&eax7) == 1)
-                    {
-                        eax7 = reinterpret_cast<void**>(0);
-                    }
-                    else
-                    {
-                        (&eax7) = 1;
-                    }
-                }
-            }
-            else
-            {
-                eax7 = 0;
-            }
-           // return eax7;
+           //     if (!(&eax7))
+           //     {
+           //         (&eax7) = 2;
+           //     }
+           //     else
+           //     {
+           //         if ((&eax7) == 1)
+           //         {
+           //             eax7 = reinterpret_cast<void**>(0);
+           //         }
+           //         else
+           //         {
+           //             (&eax7) = 1;
+           //         }
+           //     }
+           // }
+           // else
+           // {
+           //     eax7 = 0;
+           // }
+           //// return eax7;
         }
 
         public void _show_current_emulations()
@@ -5661,10 +5727,85 @@ namespace ReMUD.Game
             //TODO: Insert Logic.
         }
 
-        public void _stat_amount_used()
+        /// <summary>
+        /// The _stat_amount_used calculates how many character points are used.
+        /// </summary>
+        /// <param name="minimumStat">minimum stat.</param>
+        /// <param name="currentStat"></param>
+        /// <returns></returns>
+        public int _stat_amount_used(int minimumStat, int currentStat)
         {
-
-            //TODO: Insert Logic.
+            if (minimumStat < currentStat)
+            {
+                if (currentStat > minimumStat + 10)
+                {
+                    if (currentStat > minimumStat + 20)
+                    {
+                        if (currentStat > minimumStat + 30)
+                        {
+                            if (currentStat > minimumStat + 40)
+                            {
+                                if (currentStat > minimumStat + 50)
+                                {
+                                    if (currentStat > minimumStat + 60)
+                                    {
+                                        if (currentStat > minimumStat + 70)
+                                        {
+                                            if (currentStat > minimumStat + 80)
+                                            {
+                                                if (currentStat > minimumStat + 90)
+                                                {
+                                                    return currentStat - 90 - minimumStat + currentStat - 90 - minimumStat + (currentStat - 90 - minimumStat + currentStat - 90 - minimumStat) * 4 + 450;
+                                                }
+                                                else
+                                                {
+                                                    return currentStat - 80 - minimumStat + (currentStat - 80 - minimumStat) * 8 + 360;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return (currentStat - 70 - minimumStat << 3) + 280;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            return (currentStat - 60 - minimumStat << 3) - currentStat - 60 - minimumStat + 210;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return currentStat - 50 - minimumStat + currentStat - 50 - minimumStat + (currentStat - 50 - minimumStat + currentStat - 50 - minimumStat) * 2 + 150;
+                                    }
+                                }
+                                else
+                                {
+                                    return currentStat - 40 - minimumStat + (currentStat - 40 - minimumStat) * 4 + 100;
+                                }
+                            }
+                            else
+                            {
+                                return (currentStat - 30 - minimumStat << 2) + 60;
+                            }
+                        }
+                        else
+                        {
+                            return currentStat - 20 - minimumStat + (currentStat - 20 - minimumStat) * 2 + 30;
+                        }
+                    }
+                    else
+                    {
+                        return currentStat - 10 - minimumStat + currentStat - 10 - minimumStat + 10;
+                    }
+                }
+                else
+                {
+                    return currentStat - minimumStat;
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
 
         public void _stop_dragging_user(PlayerType player)
