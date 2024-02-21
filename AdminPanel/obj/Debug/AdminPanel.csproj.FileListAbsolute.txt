@@ -1,0 +1,10 @@
+C:\Projects\GIT\ReMUD\AdminPanel\bin\Debug\AdminPanel.exe.config
+C:\Projects\GIT\ReMUD\AdminPanel\bin\Debug\AdminPanel.exe
+C:\Projects\GIT\ReMUD\AdminPanel\bin\Debug\AdminPanel.pdb
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.Properties.Resources.resources
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.csproj.GenerateResource.cache
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.csproj.CoreCompileInputs.cache
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.exe
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.pdb
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.MainForm.resources
+C:\Projects\GIT\ReMUD\AdminPanel\obj\Debug\AdminPanel.csprojAssemblyReference.cache

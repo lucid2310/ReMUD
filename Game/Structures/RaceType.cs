@@ -9,6 +9,7 @@ namespace ReMUD.Game.Structures
 {
     public struct RaceType
     {
+        //<start>
         public short Number;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 29)]
         public char[] Name;
@@ -23,10 +24,10 @@ namespace ReMUD.Game.Structures
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         public byte[] Padding01;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityA;
+        public short[] AbilityId;
         public short CP;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityB;
+        public short[] AbilityValue;
         public int nothing3;
         public short nothing4;
         public short ExpChart;
@@ -40,5 +41,11 @@ namespace ReMUD.Game.Structures
         public int Nothing6;
         public int nothing7;
         public int nothing8;
+        //<stop>
+
+        public string GetName()
+        {
+            return Utilities.BtrieveUtility.ConvertToString(Name);
+        }
     }
 }

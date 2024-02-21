@@ -22,6 +22,22 @@ namespace ReMUD.Game.Managers
             set { _storageOne = value; }
         }
 
+        public void Update(int id, T item)
+        {
+            if(_storageOne.ContainsKey(id) == true)
+            {
+                _storageOne[id] = item;
+            }
+        }
+
+        public void Update(string id, T item)
+        {
+            if(_storageTwo.ContainsKey(id) == true)
+            {
+                _storageTwo[id] = item;
+            }
+        }
+
         public void Add(int id, T item)
         {
             if (_storageOne.ContainsKey(id) == false)

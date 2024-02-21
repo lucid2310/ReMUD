@@ -9,6 +9,7 @@ namespace ReMUD.Game.Structures
 {
     public struct NonPlayerCharacterType
     {
+        //<start>
         public int Number;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 50)]
         public char[] Nothing55;
@@ -33,9 +34,9 @@ namespace ReMUD.Game.Structures
         public short Energy;
         public short HPRegen;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityA;
+        public short[] AbilityId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 10)]
-        public short[] AbilityB;
+        public short[] AbilityValue;
         public short GameLimit;
         public short Active;
         public short Type;
@@ -121,5 +122,6 @@ namespace ReMUD.Game.Structures
         public byte Gender;
         public byte Nothing14;
         public short Nothing15;
+        //<stop>
     }
 }

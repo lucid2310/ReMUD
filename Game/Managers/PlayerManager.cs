@@ -1,5 +1,4 @@
 ﻿using ReMUD.Game.Btrieve;
-using ReMUD.Game.Content;
 using ReMUD.Game.Structures;
 using ReMUD.Game.Structures.Utilities;
 using System;
@@ -15,7 +14,7 @@ namespace ReMUD.Game.Managers
     public class PlayerManager : BaseManager<string, PlayerType>
     {
         [DllImport(BTRIEVE_DLL, CharSet = CharSet.Ansi)]
-        public static extern short BTRCALL(ushort operation,
+        public static extern ushort BTRCALL(ushort operation,
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] byte[] posBlk,
         [MarshalAs(UnmanagedType.Struct, SizeConst = KEY_BUF_LEN)]
         ref PlayerType dataBuffer,
@@ -23,9 +22,7 @@ namespace ReMUD.Game.Managers
         [MarshalAs(UnmanagedType.LPArray, SizeConst = KEY_BUF_LEN)] char[] keyBffer,
         ushort keyLength, ushort keyNum);
 
-        public string[] PlayerKeys = new string[0];
-
-        public override short Initialize(string path)
+        public override ushort Initialize(string path)
         {
             List<string> playerKeys = new List<string>();
 
@@ -53,18 +50,16 @@ namespace ReMUD.Game.Managers
 
                 if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                 {
-                    Contents.Add(BtrieveUtility.ConvertToString(RecordData.BBSName), RecordData);
-
-                    playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.BBSName));
+                    Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
                 }
                 else
                 {
                     if (Status == BtrieveTypes.BtrieveStatus.END_OF_FILE)
                     {
-                        return (short)BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
+                        return BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
                     }
 
-                    Console.WriteLine("Error: {0}", Status);
+                    LogManager.Log("Error: {0}", Status);
                 }
 
                 while (Status != BtrieveTypes.BtrieveStatus.END_OF_FILE)
@@ -74,18 +69,17 @@ namespace ReMUD.Game.Managers
 
                     if (Status == BtrieveTypes.BtrieveStatus.END_OF_FILE)
                     {
-                        Status = (short)BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
+                        Status = BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY;
                         break;
                     }
 
                     if (Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
                     {
-                        Contents.Add(BtrieveUtility.ConvertToString(RecordData.BBSName), RecordData);
-                        playerKeys.Add(BtrieveUtility.ConvertToString(RecordData.BBSName));
+                        Contents.Add(BtrieveUtility.ConvertToString(RecordData.Username), RecordData);
                     }
                     else
                     { 
-                        Console.WriteLine("Error: {0}", Status);
+                        LogManager.Log("Error: {0}", Status);
                         break;
                     }
                 }
@@ -100,27 +94,36 @@ namespace ReMUD.Game.Managers
             return Status;
         }
 
-        public short Insert(PlayerEntity player)
+        public override ushort Insert(PlayerType player)
         {
-            short status = 0;
+            Status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
+                            ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
 
-            status = BTRCALL(BtrieveTypes.BtrieveActionType.BINSERT, PositionBlock,
-                            ref player.Record, ref RecordSize, player.Record.BBSName, KEY_BUF_LEN, 0);
+            if(Status == BtrieveTypes.BtrieveStatus.COMPLETE_SUCCESSFULLY)
+            {
+                LogManager.Log("Created new player {0}", player.GetUsername());
+            }
 
-            return status;
+            return Status;
         }
 
-        public short Save(PlayerEntity player)
-        {
-            short status = 0;
 
-            status = BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
-                                    ref player.Record, ref RecordSize, player.Record.BBSName, KEY_BUF_LEN, 0);
-           
-            return status;
+        public override ushort Delete(PlayerType player)
+        {
+            return BTRCALL(BtrieveTypes.BtrieveActionType.BDELETE, PositionBlock,
+                                    ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
         }
 
-        public override short Close()
+        public override ushort Update(PlayerType player)
+        {
+            // update the local copy.
+            Contents.Update(player.GetUsername(), player);
+
+            return BTRCALL(BtrieveTypes.BtrieveActionType.BUPDATE, PositionBlock,
+                                    ref player, ref RecordSize, player.Username, KEY_BUF_LEN, 0);
+        }
+
+        public override ushort Close()
         {
             PlayerType RecordData = new PlayerType();
 
@@ -129,7 +132,16 @@ namespace ReMUD.Game.Managers
 
         public override PlayerType Select(string id)
         {
-            return BaseSelect(id);
+            PlayerType player = new PlayerType();
+
+            player = BaseSelect(id);
+
+            if(player.Username == null)
+            {
+                return PlayerType.Initialize();
+            }
+
+            return player;
         }
     }
 }

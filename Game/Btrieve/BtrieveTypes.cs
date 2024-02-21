@@ -45,7 +45,7 @@
             public const ushort DATA_BUFFER_PARAMETER = 22;
         }
 
-        public static string BtrieveErrorCode(short nStatus)
+        public static string BtrieveErrorCode(ushort nStatus)
         {
             string btrieveErrorCode = nStatus.ToString();
 
